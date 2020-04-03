@@ -1,18 +1,27 @@
 package com.paraparp.gestorfondos.model;
 
-import java.sql.Date;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -26,8 +35,9 @@ public class User {
 	private String password;
 //	@Transient
 //	private String passwordConfirm;
-	private String role;
 	private boolean google;
+	private boolean enabled;
+	private List<Role> roles;
 
 
 	@Id
@@ -94,15 +104,6 @@ public class User {
 		this.password = password;
 	}
 	
-	@Column(name="role")
-//	@Enumerated(EnumType.STRING)
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
 	@Column(name="google", columnDefinition = "boolean default false")
 	public boolean isGoogle() {
 		return google;
@@ -111,14 +112,29 @@ public class User {
 	public void setGoogle(boolean google) {
 		this.google = google;
 	}
+	@Column(name="enabled",columnDefinition = "boolean default true")
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name="users_roles", joinColumns= @JoinColumn(name="user_id"),
+				inverseJoinColumns=@JoinColumn(name="role_id"),
+				uniqueConstraints= {@UniqueConstraint(columnNames= {"user_id", "role_id"})})
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
 
 
-
-
-//	public enum Role {
-//		ADMIN,USER
-//	}
-
+	
 }
 
 

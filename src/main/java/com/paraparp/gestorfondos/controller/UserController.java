@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ import com.paraparp.gestorfondos.repository.IUserRepository;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/users")
 public class UserController 
 {
@@ -44,14 +45,14 @@ public class UserController
 		return ResponseEntity.ok().body(user);
 	}
 
-	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("")
 	public User createUser(@Valid @RequestBody User user) 
 	{
 		return userRepository.save(user);
 	}
 
-	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
 			@Valid @RequestBody User userDetails) throws ResourceNotFoundException 
@@ -65,7 +66,7 @@ public class UserController
 		return ResponseEntity.ok(updatedUser);
 	}
 
-	
+	@Secured("ROLE_USER")
 	@DeleteMapping("/{id}")
 	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException 
 	{
