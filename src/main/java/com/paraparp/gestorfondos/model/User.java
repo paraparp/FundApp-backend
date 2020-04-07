@@ -2,6 +2,7 @@ package com.paraparp.gestorfondos.model;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,16 +16,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
 	
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-
 	
 	private long id;
 	private String firstName;
@@ -33,12 +42,15 @@ public class User implements Serializable {
 	private String email;	
 	private Date creationDate;
 	private String password;
-//	@Transient
-//	private String passwordConfirm;
 	private boolean google;
 	private boolean enabled;
 	private List<Role> roles;
-
+	private List <Portfolio> portfolios;
+	
+	public User() {
+		this.portfolios = new ArrayList<>();
+	
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -86,7 +98,8 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	@Column(name="creation_date")
+	@Column(name = "creation_date")
+	@Temporal(TemporalType.DATE)
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -132,8 +145,25 @@ public class User implements Serializable {
 	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
+	
 
+	@OneToMany(fetch=FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+	public List<Portfolio> getPortfolios() {
+		return portfolios;
+	}
 
+	public void setPortfolios(List<Portfolio> portfolios) {
+		this.portfolios = portfolios;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	@PrePersist
+	public void prePersist() {
+		this.creationDate = new Date();
+	}
 	
 }
 
