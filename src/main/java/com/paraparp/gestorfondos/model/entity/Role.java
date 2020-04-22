@@ -1,4 +1,4 @@
-package com.paraparp.gestorfondos.model;
+package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
 

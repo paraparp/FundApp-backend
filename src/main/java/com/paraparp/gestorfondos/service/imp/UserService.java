@@ -1,4 +1,4 @@
-package com.paraparp.gestorfondos.service;
+package com.paraparp.gestorfondos.service.imp;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.paraparp.gestorfondos.model.User;
+import com.paraparp.gestorfondos.model.entity.User;
 import com.paraparp.gestorfondos.repository.IUserRepository;
 ;
 

@@ -1,4 +1,4 @@
-package com.paraparp.gestorfondos.model;
+package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "portfolios")
@@ -35,15 +34,13 @@ public class Portfolio implements Serializable {
 
 	@Column(name = "name", nullable = false)
 	private String name;
-
 	private String description;
 	private String currency;
-	
-	@JsonIgnore
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
-	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "portfolio_id")
 	private List<Lot> lots;
@@ -53,7 +50,6 @@ public class Portfolio implements Serializable {
 	private Date creationDate;
 
 	public Portfolio() {
-
 		lots = new ArrayList<>();
 	}
 
@@ -116,18 +112,6 @@ public class Portfolio implements Serializable {
 
 	public void setLots(List<Lot> lots) {
 		this.lots = lots;
-	}
-
-	public Double getTotal() {
-
-		Double total = 0.0;
-
-		for (Lot lot : lots) {
-			total += lot.getTotalValue();
-		}
-
-		return total;
-
 	}
 
 }

@@ -1,6 +1,8 @@
-package com.paraparp.gestorfondos.model;
+package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,10 +34,29 @@ public class Symbol implements Serializable {
 	
 	@Column(name="url")
 	private String url;
+	
+	@Column(name="last_date")
+	private String lastDate;
+	
+	@Column(name="last_price")
+	private Double lastPrice;
 
+	@Column(name="updated")
+	private Date updated;
+	
+	@Column(name="category")
+	private String category;
+	
+	@Column(name="location")
+	private String location;
+	
+	@Column(name="type")
+	private String type;
+	
 //	@Column(name = "creation_date")
 //	@Temporal(TemporalType.DATE)
 //	private Date creationDate;
+	
 
 	public long getId() {
 		return id;
@@ -79,4 +100,55 @@ public class Symbol implements Serializable {
 		this.url = url;
 	}
 
+	public Double getLastPrice() {
+		return lastPrice;
+	}
+
+	public void setLastPrice(Double lastPrice) {
+		this.lastPrice = lastPrice;
+	}
+
+	public Date getUpdated() {
+		return updated;
+	}
+
+	public void setUpdated(Date updated) {
+		this.updated = updated;
+	}
+
+	public String getLastDate() {
+		return lastDate;
+	}
+
+	public void setLastDate(String lastDate) {
+		this.lastDate = lastDate;
+	}
+
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+
+	
+	
 }

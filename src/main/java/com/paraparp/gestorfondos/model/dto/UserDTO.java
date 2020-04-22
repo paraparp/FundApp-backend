@@ -1,7 +1,11 @@
-package com.paraparp.gestorfondos.dto;
+package com.paraparp.gestorfondos.model.dto;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.paraparp.gestorfondos.model.entity.Portfolio;
+
+@JsonSerialize
 public class UserDTO {
 	
 	private long id;
@@ -13,6 +17,8 @@ public class UserDTO {
 	private String password;
 	private boolean google;
 	private boolean enabled;
+	private Portfolio portfolio;
+	
 	
 	public long getId() {
 		return id;
@@ -67,6 +73,12 @@ public class UserDTO {
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+	public Portfolio getPortfolio() {
+		return portfolio;
+	}
+	public void setPortfolio(Portfolio portfolio) {
+		this.portfolio = portfolio;
 	}
 
 

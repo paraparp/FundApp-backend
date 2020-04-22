@@ -12,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,72 +20,61 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
-import com.paraparp.gestorfondos.model.Lot;
+import com.paraparp.gestorfondos.model.dto.LotDTO;
+import com.paraparp.gestorfondos.model.entity.Lot;
 import com.paraparp.gestorfondos.repository.ILotRepository;
-
-
+import com.paraparp.gestorfondos.service.ILotService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/fundapp/lots")
-public class LotController 
-{
+public class LotController {
+	
 	@Autowired
 	private ILotRepository lotRepository;
 
+	@Autowired
+	private ILotService lotService;
+
 	@GetMapping("")
 	public List<Lot> getAllLots() {
-		
-
-		
 		return lotRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Lot> getLotById(@PathVariable(value = "id") Long lotId) throws ResourceNotFoundException 
-	{
+	public ResponseEntity<Lot> getLotById(@PathVariable(value = "id") Long lotId) throws ResourceNotFoundException {
 		Lot lot = this.checkLot(lotId);
 		return ResponseEntity.ok().body(lot);
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	@PostMapping("")
-	public Lot createLot(@Valid @RequestBody Lot lot) 
-	{
+	public Lot createLot(@Valid @RequestBody Lot lot) {
 		return lotRepository.save(lot);
 	}
 
-//	@Secured({"ROLE_ADMIN","ROLE_USER"})
-//	@PutMapping("/{id}")
-//	public ResponseEntity<Lot> updateLot(@PathVariable(value = "id") Long lotId,
-//			@Valid @RequestBody Lot lotDetails) throws ResourceNotFoundException 
-//	{
-//		Lot lot = this.checkLot(lotId);
-//		
-//		lot.setEmail(lotDetails.getEmail());
-//		lot.setLastName(lotDetails.getLastName());
-//		lot.setFirstName(lotDetails.getFirstName());
-//		final Lot updatedLot = lotRepository.save(lot);
-//		return ResponseEntity.ok(updatedLot);
-//	}
+	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
+	@PatchMapping("/")
+	public ResponseEntity<LotDTO> updateLot(@Valid @RequestBody LotDTO lot) throws ResourceNotFoundException {
+		LotDTO updatedLot = lotService.update(lot);
+		System.out.println(lot);
+		System.out.println(updatedLot);
+		return ResponseEntity.ok(updatedLot);
+	}
 
 	@Secured("ROLE_USER")
 	@DeleteMapping("/{id}")
-	public Map<String, Boolean> deleteLot(@PathVariable(value = "id") Long lotId) throws ResourceNotFoundException 
-	{
+	public Map<String, Boolean> deleteLot(@PathVariable(value = "id") Long lotId) throws ResourceNotFoundException {
 		Lot lot = this.checkLot(lotId);
-		
 		lotRepository.delete(lot);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
 
-
-	
 	/**
 	 * Busca el usuario y si no lo encuentra devuelve error
+	 * 
 	 * @param lotId
 	 * @return
 	 * @throws ResourceNotFoundException
@@ -92,7 +82,7 @@ public class LotController
 	private Lot checkLot(Long lotId) throws ResourceNotFoundException {
 		return lotRepository.findById(lotId)
 				.orElseThrow(() -> new ResourceNotFoundException("Lot not found for this id :: " + lotId));
-	
-		
+
 	}
+
 }

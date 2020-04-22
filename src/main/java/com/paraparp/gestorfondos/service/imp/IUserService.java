@@ -1,8 +1,8 @@
-package com.paraparp.gestorfondos.service;
+package com.paraparp.gestorfondos.service.imp;
 
 import org.springframework.stereotype.Service;
 
-import com.paraparp.gestorfondos.model.User;
+import com.paraparp.gestorfondos.model.entity.User;
 
 @Service
 public interface IUserService {

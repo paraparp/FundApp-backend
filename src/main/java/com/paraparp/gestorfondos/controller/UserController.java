@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
-import com.paraparp.gestorfondos.model.User;
+import com.paraparp.gestorfondos.model.entity.User;
 import com.paraparp.gestorfondos.repository.IUserRepository;
 
 

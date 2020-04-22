@@ -6,15 +6,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.paraparp.gestorfondos.model.Lot;
-import com.paraparp.gestorfondos.model.Portfolio;
-import com.paraparp.gestorfondos.model.Symbol;
-
-
+import com.paraparp.gestorfondos.model.entity.Lot;
+import com.paraparp.gestorfondos.model.entity.Portfolio;
+import com.paraparp.gestorfondos.model.entity.Symbol;
 
 @Repository
 public interface ILotRepository extends JpaRepository<Lot, Long> {
 
-	public List<Lot> findBySymbolAndPortfolio(Symbol symbol, Portfolio portfolio);
+	@Query("SELECT l FROM Lot l where l.symbol =?1 and l.portfolio.id =?2")
+	public List<Lot> findBySymbolAndPortfolio(Symbol symbol, Long idPortfolio);
+
+	public List<Lot> findByPortfolio(Portfolio portfolio);
 
 }

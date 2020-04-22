@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
-import com.paraparp.gestorfondos.model.User;
-import com.paraparp.gestorfondos.service.IUserService;
+import com.paraparp.gestorfondos.model.entity.User;
+import com.paraparp.gestorfondos.service.imp.IUserService;
 
 @Component
 public class InfoAdicionalToken implements TokenEnhancer{

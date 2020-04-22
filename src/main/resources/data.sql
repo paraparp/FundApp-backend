@@ -18,13 +18,18 @@ INSERT INTO users_roles (user_id, role_id) VALUES (2, 1);
 
 INSERT INTO portfolios (name,description, user_id) VALUES ('Fondos', 'Lista con los primeros fondos', 1);
 INSERT INTO portfolios (name,description, user_id) VALUES ('Otros fondos ', 'Lista con los otros fondos', 1);
+INSERT INTO portfolios (name,description, user_id) VALUES ('Otros fondos 2', 'Lista con los otros fondos', 1);
 
-INSERT INTO symbols (name,isin, bloomberg,url) VALUES ('Vanguard Global Stock Index Fund','IE00B03HCZ61', 'VANGLVI:ID',  'https://www.bloomberg.com/quote/VANGLVI:ID');
-INSERT INTO symbols(name,isin, bloomberg,url)  VALUES ( 'Vanguard European Stock Index Fund','IE0007987690', 'VANEIEI:ID',  'https://www.bloomberg.com/quote/VANEIEI:ID');
-INSERT INTO symbols (name,isin, bloomberg,url)  VALUES ( 'Vanguard Emerging Markets Stock Index Fund','IE0031786142', 'VANEMSI:ID',  'https://www.bloomberg.com/quote/VANEMSI:ID');
-INSERT INTO symbols (name,isin, bloomberg,url)  VALUES ( 'iShares Japan Index Fund (IE) D Acc EUR', 'VANEMSI:ID','IE00BDRK7T12',  ' https://www.bloomberg.com/quote/BGIJDEA:ID');
-
-
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (1,'Vanguard Global Stock Index Fund','IE00B03HCZ61', 'VANGLVI:ID',  'https://www.bloomberg.com/quote/VANGLVI:ID');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 2,'Vanguard European Stock Index Fund','IE0007987690', 'VANEIEI:ID',  'https://www.bloomberg.com/quote/VANEIEI:ID');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 3, 'Vanguard Emerging Markets Stock Index Fund','IE0031786142', 'VANEMSI:ID', 'https://www.bloomberg.com/quote/VANEMSI:ID');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (4, 'iShares Japan Index Fund (IE) D Acc EUR','IE00BDRK7T12','VANEMSI:ID' ,'https://www.bloomberg.com/quote/BGIJDEA:ID');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (5,'Amundi Index MSCI World - AE (C)','LU0996182563', 'AMIEAEC:LX', '');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (6, 'Amundi Index MSCI EMU - AE (C)','LU0389811372', '', '');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 7,'Amundi Funds Index Equity Emerging Markets - AE (C)','LU0996177134', '', '');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 8,'Vanguard Global Bond Index Fund - Investor Hedged','IE00BGCZ0933', '', '');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 9,'Amundi Index J.P. Morgan EMU Govies IG - AE (C)','LU1050470373', '', '');
+INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 10,'Vanguard Eurozone Inflation-Linked Bond Index Fund (Inv)','IE00B04GQQ17', '', '');
 
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 42.920, 23.2943, 'MyInvestor', 1, '2020-03-13');
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 1, 49.080, 20.3736,  'MyInvestor', 1, '2020-03-17');
@@ -38,3 +43,56 @@ INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES (
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 2, 65.18, 15.3402, 'MyInvestor', 2, '2020-03-13');
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 3, 7.300, 136.9574, 'MyInvestor', 2, '2020-03-13');
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 1, 47.38, 21.105, 'MyInvestor', 2, '2020-03-20');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 2, 65.18, 15.3402, 'MyInvestor', 3, '2020-03-13');
+
+--REAL
+INSERT INTO portfolios (id, name,description, user_id) VALUES (4, 'MIs Fondos Indexados (REAL)', 'Lista con los fonods indexados desde 2020', 1);
+
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 42.920, 23.2943, 'MyInvestor', 4, '2020-03-13');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 49.080, 20.3736, 'MyInvestor', 4, '2020-03-17');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 46.450, 21.5280, 'MyInvestor', 4, '2020-03-18');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 47.380, 21.1050, 'MyInvestor', 4, '2020-03-20');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, -22.080, 21.7639, 'MyInvestor', 4, '2020-04-03');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 5, 18.685, 160.5400, 'OPENBANK', 4, '2020-03-13');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 5, 14.250, 140.3500, 'OPENBANK', 4, '2020-03-18');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 5, 6.874, 145.4600, 'OPENBANK', 4, '2020-03-19');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 5, -1.333, 149.9600, 'OPENBANK', 4, '2020-03-30');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 6, 5.163, 145.2390, 'OPENBANK', 4, '2020-03-13');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 6, 2.0390, 122.5700, 'OPENBANK', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 7, 8.3700, 119.6500, 'OPENBANK', 4, '2020-03-13');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 7, -4.3750, 114.2600, 'OPENBANK', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 9, 2.4300,123.4280 , 'OPENBANK', 4, '2020-03-13');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 9, -2.4300,119.2000 , 'OPENBANK', 4, '2020-04-17');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 2, 65.1800,15.3402 , 'MyInvestor', 4, '2020-03-31');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 2, 64.3500,15.5380 , 'MyInvestor', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 3,7.300 ,136.9574,  'MyInvestor', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 8, 11.2400,106.6661 , 'MyInvestor', 4, '2020-03-31');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 8, 9.3300,107.0727 , 'MyInvestor', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 4, 67.87, 8.84, 'MyInvestor', 4, '2020-03-31');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, -20.860, 24.0068, 'MyInvestor', 4, '2020-04-15');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, -41.6500, 24.7468, 'MyInvestor', 4, '2020-04-17');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 10, 3.59, 139.3511, 'MyInvestor', 4, '2020-04-15');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 10, 7.38, 139.7363, 'MyInvestor', 4, '2020-04-17');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 5, -6.0200, 166.72, 'OPENBANK', 4, '2020-04-17');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 10, 3.49, 137.6760, 'MyInvestor', 4, '2020-04-21');
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 10, 3.53, 137.6760, 'MyInvestor', 4, '2020-04-21');
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, -20.2000, 23.7743, 'MyInvestor', 4, '2020-04-21');
+
+
+INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date)  VALUES ( 2, -27.7900,17.4847 , 'MyInvestor', 4, '2020-03-31');
+

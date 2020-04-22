@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
-import com.paraparp.gestorfondos.model.Symbol;
+import com.paraparp.gestorfondos.model.entity.Symbol;
 import com.paraparp.gestorfondos.repository.ISymbolRepository;
+import com.paraparp.gestorfondos.service.ISymbolService;
+import com.paraparp.gestorfondos.service.imp.SymbolUpdaterService;
 
 
 
@@ -31,6 +33,17 @@ public class SymbolController
 {
 	@Autowired
 	private ISymbolRepository symbolRepository;
+	
+	@Autowired
+	private ISymbolService symbolService;
+	
+	@Autowired
+	private SymbolUpdaterService updaterService;
+	
+	@GetMapping("/search/{isin}")
+	public Symbol searchSymbol(@PathVariable(value = "isin") String isin) throws Exception{
+		return this.updaterService.searchByIsin(isin);
+	}
 
 	@GetMapping("")
 	public List<Symbol> getAllSymbols() {
@@ -44,26 +57,13 @@ public class SymbolController
 		return ResponseEntity.ok().body(symbol);
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+//	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PostMapping("")
 	public Symbol createSymbol(@Valid @RequestBody Symbol symbol) 
 	{
-		return symbolRepository.save(symbol);
+		return symbolService.save(symbol);
 	}
 
-//	@Secured({"ROLE_ADMIN","ROLE_USER"})
-//	@PutMapping("/{id}")
-//	public ResponseEntity<Symbol> updateSymbol(@PathVariable(value = "id") Long symbolId,
-//			@Valid @RequestBody Symbol symbolDetails) throws ResourceNotFoundException 
-//	{
-//		Symbol symbol = this.checkSymbol(symbolId);
-//		
-//		symbol.setEmail(symbolDetails.getEmail());
-//		symbol.setLastName(symbolDetails.getLastName());
-//		symbol.setFirstName(symbolDetails.getFirstName());
-//		final Symbol updatedSymbol = symbolRepository.save(symbol);
-//		return ResponseEntity.ok(updatedSymbol);
-//	}
 
 	@Secured("ROLE_USER")
 	@DeleteMapping("/{id}")
