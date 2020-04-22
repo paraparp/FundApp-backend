@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,23 +24,10 @@ public class LotService implements ILotService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Lot findById(Long id) {
+	public LotDTO findById(Long id) {
 
-//		List<LotDTO> listLots = new ArrayList<LotDTO>();
-//		List<Lot> lotsBack = new ArrayList<Lot>();
-//		lotsBack = this.lotRepo.findAll();
-//
-//		for (Lot lot : lotsBack) {
-//			listLots.add(this.modelMapper.map(lot, LotDTO.class));
-//		}
-
-		return findById(id);
-	}
-
-	@Override
-	@Transactional
-	public Lot save(Lot lot) {
-		return lotRepository.save(lot);
+		Optional<Lot> lot = lotRepository.findById(id);
+		return modelMapper.map(lot.get(), LotDTO.class);
 	}
 
 	@Override
@@ -50,11 +38,20 @@ public class LotService implements ILotService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Lot> findAll() {
-		return lotRepository.findAll();
+	public List<LotDTO> findAll() {
+	
+		List<LotDTO> listLots = new ArrayList<LotDTO>();
+		List<Lot> lotsBack = new ArrayList<Lot>();
+		lotsBack = this.lotRepository.findAll();
+
+		for (Lot lot : lotsBack) {
+			listLots.add(this.modelMapper.map(lot, LotDTO.class));
+		}
+		return listLots;
 	}
 
 	@Override
+	@Transactional
 	public LotDTO save(LotDTO lotDTO) {
 
 		Optional<Lot> lotOp = lotRepository.findById(lotDTO.getId());

@@ -37,8 +37,8 @@ public class LotController {
 	private ILotService lotService;
 
 	@GetMapping("")
-	public List<Lot> getAllLots() {
-		return lotRepository.findAll();
+	public List<LotDTO> getAllLots() {
+		return lotService.findAll();
 	}
 
 	@GetMapping("/{id}")

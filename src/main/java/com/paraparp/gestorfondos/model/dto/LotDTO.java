@@ -2,10 +2,9 @@ package com.paraparp.gestorfondos.model.dto;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.paraparp.gestorfondos.model.entity.Symbol;
 
-@JsonSerialize
+
 public class LotDTO {
 
 	private long id;
@@ -91,13 +90,6 @@ public class LotDTO {
 		return volume * price;
 
 	}
-
-	@Override
-	public String toString() {
-		return "LotDTO [id=" + id + ", symbol=" + symbol + ", volume=" + volume + ", price=" + price + ", broker="
-				+ broker + ", idPortfolio=" + idPortfolio + "]";
-	}
-
 	
 }
 
