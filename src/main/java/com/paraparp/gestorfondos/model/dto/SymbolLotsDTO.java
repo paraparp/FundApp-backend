@@ -7,52 +7,21 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.paraparp.gestorfondos.model.entity.Lot;
 import com.paraparp.gestorfondos.model.entity.Symbol;
 
+import lombok.Data;
+
 @JsonSerialize
+@Data
 public class SymbolLotsDTO {
 
 	private Symbol symbol;
 
 	@JsonIgnore
 	private PortfolioDTO portfolio;
-	
+
 	@JsonIgnore
 	private List<Lot> lots;
 
-	public SymbolLotsDTO() {
-
-	}
-
-	public SymbolLotsDTO(Symbol symbol, PortfolioDTO portfolio, List<Lot> lots) {
-		super();
-		this.symbol = symbol;
-		this.portfolio = portfolio;
-		this.lots = lots;
-	}
-
-	public Symbol getSymbol() {
-		return symbol;
-	}
-
-	public void setSymbol(Symbol symbol) {
-		this.symbol = symbol;
-	}
-
-	public PortfolioDTO getPortfolio() {
-		return portfolio;
-	}
-
-	public void setPortfolio(PortfolioDTO portfolio) {
-		this.portfolio = portfolio;
-	}
-
-
-	public List<Lot> getLots() {
-		return lots;
-	}
-
-	public void setLots(List<Lot> lots) {
-		this.lots = lots;
-	}
+	
 
 	public Double getVolume() {
 
@@ -64,7 +33,7 @@ public class SymbolLotsDTO {
 	}
 
 	public Double getValue() {
-		return symbol.getLastPrice() != null ? getVolume() * symbol.getLastPrice(): 0.00;
+		return symbol.getLastPrice() != null ? getVolume() * symbol.getLastPrice() : 0.00;
 	}
 
 	public Double getCost() {
@@ -79,18 +48,20 @@ public class SymbolLotsDTO {
 
 	public Double getPrice() {
 
-		return getCost() / getVolume();
+		return (getVolume()!= 0) ?(getCost() / getVolume()) :0.00;
 	}
-	
-	
+
 	public Double getPercentVariation() {
 
-		return  (getValue()-getCost()) /getCost();
+		return (getValue() - getCost()) / getCost();
 	}
-	
+
 	public Double getPercentInPortfolio() {
-
-		return  null;
+		return getCost()/portfolio.getCost();
 	}
 
+	public Double getLastPercentInPortfolio() {
+
+		return getValue()/portfolio.getValue();
+	}
 }

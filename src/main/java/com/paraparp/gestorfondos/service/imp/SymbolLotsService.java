@@ -45,12 +45,16 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 		List<SymbolLotsDTO> symbolLots = new ArrayList<SymbolLotsDTO>();
 
-		for (Symbol s : hashSet) {
+		for (Symbol symbol : hashSet) {
 
-			List<Lot> lots = lotRepo.findBySymbolAndPortfolio(s, idPortfolio);
+			List<Lot> lots = lotRepo.findBySymbolAndPortfolio(symbol, idPortfolio);
 			
-			symbolLots.add(new SymbolLotsDTO(s, portfolio, lots));
-
+			SymbolLotsDTO symbolLotsDTO = new SymbolLotsDTO();
+			symbolLotsDTO.setLots(lots);
+			symbolLotsDTO.setPortfolio(portfolio);
+			symbolLotsDTO.setSymbol(symbol);
+			symbolLots.add(symbolLotsDTO);
+		
 		}
 
 		return symbolLots;

@@ -20,45 +20,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
+import com.paraparp.gestorfondos.model.dto.UserDTO;
 import com.paraparp.gestorfondos.model.entity.User;
 import com.paraparp.gestorfondos.repository.IUserRepository;
-
-
+import com.paraparp.gestorfondos.service.IUserService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/fundapp/users")
-public class UserController 
-{
+public class UserController {
 	@Autowired
 	private IUserRepository userRepository;
+	
+	@Autowired
+	private IUserService userService;
 
+//	@Secured("ROLE_ADMIN" )
 	@GetMapping("")
-	public List<User> getAllUsers() {
-		return userRepository.findAll();
+	public List<UserDTO> getAllUsers() {
+		return userService.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException 
-	{
+	public ResponseEntity<User> getUserById(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 		User user = this.checkUser(userId);
 		return ResponseEntity.ok().body(user);
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	@PostMapping("")
-	public User createUser(@Valid @RequestBody User user) 
-	{
+	public User createUser(@Valid @RequestBody User user) {
 		return userRepository.save(user);
 	}
 
-	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	@PutMapping("/{id}")
 	public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId,
-			@Valid @RequestBody User userDetails) throws ResourceNotFoundException 
-	{
+			@Valid @RequestBody User userDetails) throws ResourceNotFoundException {
 		User user = this.checkUser(userId);
-		
+
 		user.setEmail(userDetails.getEmail());
 		user.setLastName(userDetails.getLastName());
 		user.setFirstName(userDetails.getFirstName());
@@ -68,21 +68,18 @@ public class UserController
 
 	@Secured("ROLE_USER")
 	@DeleteMapping("/{id}")
-	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException 
-	{
+	public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId) throws ResourceNotFoundException {
 		User user = this.checkUser(userId);
-		
+
 		userRepository.delete(user);
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("deleted", Boolean.TRUE);
 		return response;
 	}
-	
 
-
-	
 	/**
 	 * Busca el usuario y si no lo encuentra devuelve error
+	 * 
 	 * @param userId
 	 * @return
 	 * @throws ResourceNotFoundException
@@ -90,7 +87,6 @@ public class UserController
 	private User checkUser(Long userId) throws ResourceNotFoundException {
 		return userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
-	
-		
+
 	}
 }

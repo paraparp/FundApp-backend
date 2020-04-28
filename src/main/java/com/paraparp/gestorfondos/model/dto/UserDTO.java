@@ -2,10 +2,12 @@ package com.paraparp.gestorfondos.model.dto;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.paraparp.gestorfondos.model.entity.Portfolio;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
-@JsonSerialize
+import lombok.Data;
+
+
+@Data
 public class UserDTO {
 	
 	private long id;
@@ -17,71 +19,5 @@ public class UserDTO {
 	private String password;
 	private boolean google;
 	private boolean enabled;
-	private Portfolio portfolio;
-	
-	
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
-	public String getFirstName() {
-		return firstName;
-	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-	public String getLastName() {
-		return lastName;
-	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public Date getCreationDate() {
-		return creationDate;
-	}
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public boolean isGoogle() {
-		return google;
-	}
-	public void setGoogle(boolean google) {
-		this.google = google;
-	}
-	public boolean isEnabled() {
-		return enabled;
-	}
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
-	public Portfolio getPortfolio() {
-		return portfolio;
-	}
-	public void setPortfolio(Portfolio portfolio) {
-		this.portfolio = portfolio;
-	}
 
-
-
-	
 }

@@ -63,7 +63,6 @@ public class LotService implements ILotService {
 	public LotDTO update(LotDTO lotDTO) {
 
 		Lot lot = modelMapper.map(lotDTO, Lot.class);
-		System.out.println(lot);
 		return modelMapper.map(lotRepository.save(lot), LotDTO.class);
 
 	}

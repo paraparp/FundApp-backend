@@ -1,7 +1,6 @@
 package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,13 +14,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "portfolios")
 public class Portfolio implements Serializable {
@@ -48,70 +49,5 @@ public class Portfolio implements Serializable {
 	@Column(name = "creation_date")
 	@Temporal(TemporalType.DATE)
 	private Date creationDate;
-
-	public Portfolio() {
-		lots = new ArrayList<>();
-	}
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-	@PrePersist
-	public void prePersist() {
-		this.creationDate = new Date();
-	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
-	public List<Lot> getLots() {
-		return lots;
-	}
-
-	public void setLots(List<Lot> lots) {
-		this.lots = lots;
-	}
 
 }

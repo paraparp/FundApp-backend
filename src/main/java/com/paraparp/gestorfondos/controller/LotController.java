@@ -49,8 +49,8 @@ public class LotController {
 
 	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	@PostMapping("")
-	public Lot createLot(@Valid @RequestBody Lot lot) {
-		return lotRepository.save(lot);
+	public LotDTO saveLot(@Valid @RequestBody LotDTO lot) {
+		return lotService.save(lot);
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_USER" })

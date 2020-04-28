@@ -67,9 +67,8 @@ public class PortfolioService implements IPortfolioService {
 	@Transactional(readOnly = true)
 	public List<PortfolioDTO> findAll() {
 		List<PortfolioDTO> listPortfolios = new ArrayList<PortfolioDTO>();
-		List<Portfolio> portfoliosBack = new ArrayList<Portfolio>();
-		portfoliosBack = this.portfolioRepo.findAll();
-
+		
+		List<Portfolio> portfoliosBack = this.portfolioRepo.findAll();
 		for (Portfolio portfolio : portfoliosBack) {
 			listPortfolios.add(this.modelMapper.map(portfolio, PortfolioDTO.class));
 		}

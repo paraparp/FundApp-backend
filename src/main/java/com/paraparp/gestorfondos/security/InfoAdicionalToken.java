@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.stereotype.Component;
 
 import com.paraparp.gestorfondos.model.entity.User;
-import com.paraparp.gestorfondos.service.imp.IUserService;
+import com.paraparp.gestorfondos.service.IUserService;
 
 @Component
 public class InfoAdicionalToken implements TokenEnhancer{
