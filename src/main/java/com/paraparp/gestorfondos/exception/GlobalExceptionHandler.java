@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -123,8 +124,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(DataIntegrityViolationException ex,
-			HttpHeaders hh, HttpStatus hs, WebRequest wr) {
+	protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(DataIntegrityViolationException ex, HttpStatus hs, WebRequest wr) {
 
 		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
 		ErrorDTO response = new ErrorDTO();
@@ -154,7 +154,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		body.put("status", status.value());
 
 		// Get all errors
-		List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(x -> x.getDefaultMessage())
+		List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
 				.collect(Collectors.toList());
 
 		body.put("errors", errors);
