@@ -11,12 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
-import com.paraparp.gestorfondos.model.dto.SymbolLotsDTO;
-import com.paraparp.gestorfondos.model.entity.Lot;
-import com.paraparp.gestorfondos.model.entity.Portfolio;
+import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Symbol;
-import com.paraparp.gestorfondos.repository.ILotRepository;
-import com.paraparp.gestorfondos.repository.ISymbolRepository;
+import com.paraparp.gestorfondos.service.ILotService;
 import com.paraparp.gestorfondos.service.ISymbolLotsService;
 
 @Service
@@ -26,40 +23,35 @@ public class SymbolLotsService implements ISymbolLotsService {
 	private PortfolioService porfolioSrv;
 
 	@Autowired
-	private ILotRepository lotRepo;
-	
-	@Autowired
-	private ISymbolRepository symbolRepo;
+	private ILotService lotService;
+
 
 	@Override
 	@Transactional
-	public List<SymbolLotsDTO> findByPortfolio(Long idPortfolio) {
+	public List<SymbolLotDTO> findByPortfolio(Long idPortfolio) {
 
 		PortfolioDTO portfolio = porfolioSrv.findById(idPortfolio);
 		List<LotDTO> lotsPorfolio = portfolio.getLots();
+		
 		Set<Symbol> hashSet = new HashSet<Symbol>();
+		lotsPorfolio.forEach(lot-> hashSet.add(lot.getSymbol()));
 
-		for (LotDTO lot : lotsPorfolio) {
-			hashSet.add(lot.getSymbol());
-		}
-
-		List<SymbolLotsDTO> symbolLots = new ArrayList<SymbolLotsDTO>();
+		List<SymbolLotDTO> symbolLots = new ArrayList<SymbolLotDTO>();
 
 		for (Symbol symbol : hashSet) {
 
-			List<Lot> lots = lotRepo.findBySymbolAndPortfolio(symbol, idPortfolio);
+			List<LotDTO> lots = lotService.findBySymbolAndPortfolio(symbol, idPortfolio);
 			
-			SymbolLotsDTO symbolLotsDTO = new SymbolLotsDTO();
+			SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
 			symbolLotsDTO.setLots(lots);
 			symbolLotsDTO.setPortfolio(portfolio);
 			symbolLotsDTO.setSymbol(symbol);
+			
 			symbolLots.add(symbolLotsDTO);
-		
 		}
-
+		
 		return symbolLots;
-
-
 	}
+
 
 }

@@ -1,6 +1,7 @@
 package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -14,6 +15,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -25,7 +28,7 @@ import lombok.Data;
 public class Lot implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -33,9 +36,15 @@ public class Lot implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Symbol symbol;
 
-	private Double volume;
-	private Double price;
+    @Column(columnDefinition = "decimal(18,2) default 0")
+	private BigDecimal volume;
+
+
+    @Column(columnDefinition = "decimal(18,2) default 0")
+	private BigDecimal price;
+
 	private String broker;
+
 	private Date date;
 
 	@JsonIgnore
@@ -45,7 +54,5 @@ public class Lot implements Serializable {
 	@Column(name = "creation_date")
 	@Temporal(TemporalType.DATE)
 	private Date creationDate;
-
-
 
 }

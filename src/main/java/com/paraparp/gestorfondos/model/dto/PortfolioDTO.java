@@ -1,53 +1,52 @@
 package com.paraparp.gestorfondos.model.dto;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.paraparp.gestorfondos.model.entity.Lot;
+import com.paraparp.gestorfondos.util.Util2;
 
 import lombok.Data;
 
-
 @Data
+
 public class PortfolioDTO {
 
-	
 	private long id;
 	private String name;
 	private String description;
 	private String currency;
 	private Long idUser;
+
 	private List<LotDTO> lots;
 	private Date creationDate;
 
-	
-	public Double getCost() {
-		Double total = 0.0;
+	public BigDecimal getCost() {
+
+		BigDecimal total = BigDecimal.ZERO;
 		for (LotDTO lot : lots) {
-			total += lot.getTotalCost();
+			total = total.add(lot.getCost());
 		}
 
 		return total;
 	}
 
-	public Double getValue() {
-		Double total = 0.0;
+	public BigDecimal getValue() {
+
+		BigDecimal total = BigDecimal.ZERO;
 		for (LotDTO lot : lots) {
-			total += lot.getTotalValue();
+			total = total.add(lot.getValue());
 		}
-		
-		return total;
-	}
-	
-	public Double getVariation() {
-		return getValue() - getCost();
+
+		return (total.compareTo(BigDecimal.ZERO) != 0) ? total : getCost();
 	}
 
-	public Double getVariationPercent() {
-		return (getCost()!=0.00)?((getValue() - getCost())/ getCost()):0.00;
+	public BigDecimal getVariation() {
+		return getValue().subtract(getCost());
 	}
 
+	public BigDecimal getVariationPercent() {
+		return Util2.utilDivideBD(getVariation(), getCost());
+	}
 
 }

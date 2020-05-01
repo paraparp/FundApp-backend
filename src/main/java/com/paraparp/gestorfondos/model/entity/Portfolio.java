@@ -35,7 +35,9 @@ public class Portfolio implements Serializable {
 
 	@Column(name = "name", nullable = false)
 	private String name;
+	
 	private String description;
+	
 	private String currency;
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,5 +51,5 @@ public class Portfolio implements Serializable {
 	@Column(name = "creation_date")
 	@Temporal(TemporalType.DATE)
 	private Date creationDate;
-
+//	  private final LocalDateTime createdAt = LocalDateTime.now();
 }

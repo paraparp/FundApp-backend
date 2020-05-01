@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
@@ -41,9 +42,10 @@ public class LotController {
 		return lotService.findAll();
 	}
 
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<Lot> getLotById(@PathVariable(value = "id") Long lotId) throws ResourceNotFoundException {
-		Lot lot = this.checkLot(lotId);
+	public ResponseEntity<LotDTO> getLotById(@PathVariable(value = "id") Long lotId)  {
+		LotDTO lot = lotService.findById(lotId);
 		return ResponseEntity.ok().body(lot);
 	}
 
@@ -57,8 +59,6 @@ public class LotController {
 	@PatchMapping("/")
 	public ResponseEntity<LotDTO> updateLot(@Valid @RequestBody LotDTO lot) throws ResourceNotFoundException {
 		LotDTO updatedLot = lotService.update(lot);
-		System.out.println(lot);
-		System.out.println(updatedLot);
 		return ResponseEntity.ok(updatedLot);
 	}
 
@@ -82,7 +82,6 @@ public class LotController {
 	private Lot checkLot(Long lotId) throws ResourceNotFoundException {
 		return lotRepository.findById(lotId)
 				.orElseThrow(() -> new ResourceNotFoundException("Lot not found for this id :: " + lotId));
-
 	}
 
 }

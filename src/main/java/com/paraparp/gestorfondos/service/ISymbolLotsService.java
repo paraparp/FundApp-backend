@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.paraparp.gestorfondos.model.dto.SymbolLotsDTO;
+import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 
 @Service
 public interface ISymbolLotsService {
 
-	public List<SymbolLotsDTO> findByPortfolio(Long idPortfolio);
+	public List<SymbolLotDTO> findByPortfolio(Long idPortfolio);
 
 }

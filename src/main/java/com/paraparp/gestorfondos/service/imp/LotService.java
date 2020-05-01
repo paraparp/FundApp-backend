@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.entity.Lot;
+import com.paraparp.gestorfondos.model.entity.Symbol;
 import com.paraparp.gestorfondos.repository.ILotRepository;
 import com.paraparp.gestorfondos.service.ILotService;
 
@@ -27,7 +30,11 @@ public class LotService implements ILotService {
 	public LotDTO findById(Long id) {
 
 		Optional<Lot> lot = lotRepository.findById(id);
-		return modelMapper.map(lot.get(), LotDTO.class);
+		if (lot.isPresent()) {
+			return modelMapper.map(lot.get(), LotDTO.class);
+		} else {
+			throw new EntityNotFoundException("Credential with id " + id + " does not exists");
+		}
 	}
 
 	@Override
@@ -39,14 +46,10 @@ public class LotService implements ILotService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<LotDTO> findAll() {
-	
-		List<LotDTO> listLots = new ArrayList<LotDTO>();
-		List<Lot> lotsBack = new ArrayList<Lot>();
-		lotsBack = this.lotRepository.findAll();
 
-		for (Lot lot : lotsBack) {
-			listLots.add(this.modelMapper.map(lot, LotDTO.class));
-		}
+		List<LotDTO> listLots = new ArrayList<LotDTO>();
+		List<Lot> lotsBack = this.lotRepository.findAll();
+		lotsBack.forEach(lot -> listLots.add(this.modelMapper.map(lot, LotDTO.class)));
 		return listLots;
 	}
 
@@ -64,7 +67,17 @@ public class LotService implements ILotService {
 
 		Lot lot = modelMapper.map(lotDTO, Lot.class);
 		return modelMapper.map(lotRepository.save(lot), LotDTO.class);
-
 	}
 
+	@Override
+	@Transactional(readOnly = true)
+	public List<LotDTO> findBySymbolAndPortfolio(Symbol symbol, Long idPortfolio) {
+
+		List<Lot> lotsBack = lotRepository.findBySymbolAndPortfolio(symbol, idPortfolio);
+		List<LotDTO> lotsDTO = new ArrayList<LotDTO>();
+		lotsBack.forEach(lot -> lotsDTO.add(this.modelMapper.map(lot, LotDTO.class)));
+
+		return lotsDTO;
+
+	}
 }

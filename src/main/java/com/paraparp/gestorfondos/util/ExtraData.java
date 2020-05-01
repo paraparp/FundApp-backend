@@ -1,18 +1,20 @@
 package com.paraparp.gestorfondos.util;
 
+import java.math.BigDecimal;
+
 public class ExtraData {
 
 	private String name;
 	private String isin;
-	private Double lastPrice;
-	private Double maxPrice;
-	private Double minPrice;
+	private BigDecimal lastPrice;
+	private BigDecimal maxPrice;
+	private BigDecimal minPrice;
 	private String updatedAt;
 	private String category;
 	private String type;
 	private String location;
 
-	public ExtraData(Double lastPrice, Double maxPrice, Double minPrice, String updatedAt, String category, String type,
+	public ExtraData(BigDecimal lastPrice, BigDecimal maxPrice, BigDecimal minPrice, String updatedAt, String category, String type,
 			String location) {
 		super();
 		this.lastPrice = lastPrice;
@@ -24,7 +26,7 @@ public class ExtraData {
 		this.location = location;
 	}
 
-	public ExtraData(String name, String isin, Double lastPrice, Double maxPrice, Double minPrice, String updatedAt,
+	public ExtraData(String name, String isin, BigDecimal lastPrice, BigDecimal maxPrice, BigDecimal minPrice, String updatedAt,
 			String category, String type, String location) {
 		super();
 		this.name = name;
@@ -38,27 +40,27 @@ public class ExtraData {
 		this.location = location;
 	}
 
-	public Double getLastPrice() {
+	public BigDecimal getLastPrice() {
 		return lastPrice;
 	}
 
-	public void setLastPrice(Double lastPrice) {
+	public void setLastPrice(BigDecimal lastPrice) {
 		this.lastPrice = lastPrice;
 	}
 
-	public Double getMaxPrice() {
+	public BigDecimal getMaxPrice() {
 		return maxPrice;
 	}
 
-	public void setMaxPrice(Double maxPrice) {
+	public void setMaxPrice(BigDecimal maxPrice) {
 		this.maxPrice = maxPrice;
 	}
 
-	public Double getMinPrice() {
+	public BigDecimal getMinPrice() {
 		return minPrice;
 	}
 
-	public void setMinPrice(Double minPrice) {
+	public void setMinPrice(BigDecimal minPrice) {
 		this.minPrice = minPrice;
 	}
 

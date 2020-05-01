@@ -1,5 +1,7 @@
 package com.paraparp.gestorfondos.util;
 
+import java.math.BigDecimal;
+
 import org.apache.commons.lang3.StringUtils;
 
 public class Util {
@@ -11,9 +13,9 @@ public class Util {
 
 		WebScraper ws = new WebScraper(url);
 
-		Double lastPrice = Double.valueOf(ws.scrapData("priceText__1853e8a5"));
-		Double maxPrice = Double.valueOf(ws.scrapData("textRight__9a2b77e6"));
-		Double minPrice = Double.valueOf(ws.scrapData("textLeft__c99cf899"));
+		BigDecimal lastPrice = new BigDecimal(ws.scrapData("priceText__1853e8a5"));
+		BigDecimal maxPrice = new BigDecimal(ws.scrapData("textRight__9a2b77e6"));
+		BigDecimal minPrice = new BigDecimal(ws.scrapData("textLeft__c99cf899"));
 		String updatedAt = ws.scrapData("time__245ca7bb");
 
 		return new ExtraData(lastPrice, maxPrice, minPrice, updatedAt, null, null, null);
@@ -45,11 +47,13 @@ public class Util {
 			location = ws.scrapDataByXpath(FT_XPATH_LOCATION2);
 		}
 
-//		Double maxPrice = Double.valueOf(ws.scrapData("textRight__9a2b77e6"));
-//		Double minPrice = Double.valueOf(ws.scrapData("textLeft__c99cf899"));
+//		BigDecimal maxPrice = new BigDecimal(ws.scrapData("textRight__9a2b77e6"));
+//		BigDecimal minPrice = new BigDecimal(ws.scrapData("textLeft__c99cf899"));
 		// TODO solo estos valores serian necesarios en el update
 		String updatedAt = ws.scrapData("mod-disclaimer").split("of")[1].replaceAll(". As", "").trim();
-		Double lastPrice = Double.valueOf(ws.scrapData(FT_CLASS_LASTPRICE).split(" ")[0]);
+		updatedAt = updatedAt.length()<15 ?  updatedAt: "No Data";
+		BigDecimal lastPrice = new BigDecimal(ws.scrapData(FT_CLASS_LASTPRICE).split(" ")[0]);
+		
 		return new ExtraData(name, isinBD, lastPrice, null, null, updatedAt, category, StringUtils.capitalize(type),
 				location);
 	}

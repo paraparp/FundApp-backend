@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
-import com.paraparp.gestorfondos.model.dto.SymbolLotsDTO;
+import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Portfolio;
 import com.paraparp.gestorfondos.repository.IPortfolioRepository;
 import com.paraparp.gestorfondos.service.IPortfolioService;
@@ -94,7 +94,7 @@ public class PortfolioController {
 
 	// Portfolio lots grouped by Symbol
 	@GetMapping("/watchlist/{id}")
-	public ResponseEntity<List<SymbolLotsDTO>> getPortfolioLotsById(@PathVariable(value = "id") Long portfolioId)
+	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsById(@PathVariable(value = "id") Long portfolioId)
 			throws ResourceNotFoundException {
 		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
 		return ResponseEntity.ok().body(symbolLotsService.findByPortfolio(portfolioId));
