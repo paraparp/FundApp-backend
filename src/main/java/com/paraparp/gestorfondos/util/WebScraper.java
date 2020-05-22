@@ -78,6 +78,8 @@ public class WebScraper {
 			response = connection.ignoreHttpErrors(true).execute();
 		} catch (IOException ex) {
 			System.out.println("Excepción al obtener el Status Code: " + ex.getMessage());
+
+			return 500;
 		}
 
 		if (response.statusCode() != 200) {
@@ -88,4 +90,6 @@ public class WebScraper {
 
 		return response.statusCode();
 	}
+	
+
 }

@@ -44,7 +44,8 @@ public class Lot implements Serializable {
 	private BigDecimal price;
 
 	private String broker;
-
+	
+	@Temporal(TemporalType.DATE)
 	private Date date;
 
 	@JsonIgnore

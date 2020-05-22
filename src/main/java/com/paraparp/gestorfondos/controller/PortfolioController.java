@@ -1,8 +1,11 @@
 package com.paraparp.gestorfondos.controller;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -17,11 +20,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
+import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
+import com.paraparp.gestorfondos.model.dto.SimpleLotDTO;
 import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Portfolio;
 import com.paraparp.gestorfondos.repository.IPortfolioRepository;
@@ -59,6 +65,18 @@ public class PortfolioController {
 		return ResponseEntity.ok().body(portfolioService.findLotsByPorfolio(portfolioId));
 	}
 
+	@GetMapping("/{id}/lots/cost")
+	public ResponseEntity<List<DailyCostDTO>> getCost(@PathVariable(value = "id") Long portfolioId)
+			throws ResourceNotFoundException {
+		return ResponseEntity.ok().body(portfolioService.findCostPortfolio(portfolioId));
+	}
+
+	@GetMapping("/{id}/lots/date")
+	public ResponseEntity<List<SymbolLotDTO>> getSymbolBeforeDate(@PathVariable(value = "id") Long portfolioId,
+			@RequestParam(value = "end-date", required = false) String endDate) throws ResourceNotFoundException {
+		return ResponseEntity.ok().body(symbolLotsService.findByPortfolioAndEndDate(portfolioId, endDate));
+	}
+
 	@GetMapping("/user/{id}")
 	public ResponseEntity<List<PortfolioDTO>> getPortfolioByIdUser(@PathVariable(value = "id") Long userId)
 			throws ResourceNotFoundException {
@@ -75,7 +93,7 @@ public class PortfolioController {
 	@PatchMapping("")
 	public ResponseEntity<PortfolioDTO> updatePortfolio(@Valid @RequestBody PortfolioDTO portfolio)
 			throws ResourceNotFoundException {
-	
+
 		PortfolioDTO updatedPortfolio = portfolioService.save(portfolio);
 		return ResponseEntity.ok(updatedPortfolio);
 	}
@@ -98,6 +116,34 @@ public class PortfolioController {
 			throws ResourceNotFoundException {
 		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
 		return ResponseEntity.ok().body(symbolLotsService.findByPortfolio(portfolioId));
+	}
+
+	@GetMapping("/watchlist/{id}/{broker}")
+	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdandBroker(
+			@PathVariable(value = "id") Long portfolioId, @PathVariable(value = "broker") String broker)
+			throws ResourceNotFoundException {
+		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
+		return ResponseEntity.ok().body(symbolLotsService.findByPortfolioAndBroker(portfolioId, broker));
+	}
+
+	@GetMapping("/watchlist/{id}/filters")
+	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdandBrokerAndType(
+			@PathVariable(value = "id") Long portfolioId,
+			@RequestParam(value = "broker", required = false) String broker,
+			@RequestParam(value = "type", required = false) String type) throws ResourceNotFoundException {
+
+		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
+		return ResponseEntity.ok().body(symbolLotsService.groupByBrokerAndType(portfolioId, broker, type));
+	}
+
+	@GetMapping("/{id}/brokers")
+	public List<String> getBrokersByPortfolio(@PathVariable(value = "id") Long portfolioId) {
+		return portfolioService.listBrokersByPortfolio(portfolioId);
+	}
+
+	@GetMapping("/{id}/types")
+	public List<String> getTypesByPortfolio(@PathVariable(value = "id") Long portfolioId) {
+		return portfolioService.listTypesByPortfolio(portfolioId);
 	}
 
 	/**

@@ -20,23 +20,27 @@ public class SymbolUpdaterService {
 	public String updater() {
 
 		List<Symbol> symbols = respository.findAll();
+
 		int updated = 0;
 
 		for (Symbol symbol : symbols) {
 
-			ExtraData bd = Util.getFTData(symbol.getIsin());
+			ExtraData bd = null;
+			try {
+				bd = Util.getFTData(symbol.getIsin());
+			} catch (Exception e) {
+
+				bd = null;
+			}
 
 			if (bd != null) {
-				symbol.setLastPrice(bd.getLastPrice());
-//			symbol.setMaxPrice(bd.getMaxPrice());
-//			symbol.seMinPrice(bd.getMinPrice());
-				symbol.setLastDate(bd.getUpdatedAt());
-				symbol.setUpdated(new Date());
-				symbol.setCategory(bd.getCategory());
-				symbol.setType(bd.getType());
-				symbol.setLocation(bd.getLocation());
+				symbol.setName(bd.getName());
+				symbol = fillObject(symbol, bd);
 
 				updated++;
+			} else {
+
+				System.out.println(symbol.getIsin() + " - " + symbol.getName() + ": Failed Update. ");
 			}
 		}
 		respository.saveAll(symbols);
@@ -62,17 +66,9 @@ public class SymbolUpdaterService {
 		}
 
 		if (bd != null) {
+
 			Symbol symbol = new Symbol();
-			symbol.setName(bd.getName());
-			symbol.setIsin(bd.getIsin());
-			symbol.setLastPrice(bd.getLastPrice());
-//		symbol.setMaxPrice(bd.getMaxPrice());
-//		symbol.seMinPrice(bd.getMinPrice());
-			symbol.setLastDate(bd.getUpdatedAt());
-			symbol.setUpdated(new Date());
-			symbol.setCategory(bd.getCategory());
-			symbol.setType(bd.getType());
-			symbol.setLocation(bd.getLocation());
+			fillObject(symbol, bd);
 
 			return symbol;
 		}
@@ -80,4 +76,21 @@ public class SymbolUpdaterService {
 
 	}
 
+	private Symbol fillObject(Symbol symbol, ExtraData bd) {
+		symbol.setName(bd.getName());
+		symbol.setIsin(bd.getIsin());
+		symbol.setLastPrice(bd.getLastPrice());
+		symbol.setLastDate(bd.getUpdatedAt());
+		symbol.setUpdated(new Date());
+		symbol.setCategory(bd.getCategory());
+		symbol.setType(bd.getType());
+		symbol.setLocation(bd.getLocation());
+		symbol.setUrl(bd.getUrl());
+		symbol.setDailyChange(bd.getDailyChange());
+		symbol.setDailyChangePercent(bd.getDailyChangePercent());
+		symbol.setOneYear(bd.getOneYear());
+		symbol.setFiveYears(bd.getFiveYears());
+
+		return symbol;
+	}
 }

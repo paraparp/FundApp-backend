@@ -20,5 +20,7 @@ public interface ISymbolService {
 	public List<Symbol> findByIdUser(Long userId);
 
 	public Symbol findByIsin(String  isin);
+	
+
 
 }

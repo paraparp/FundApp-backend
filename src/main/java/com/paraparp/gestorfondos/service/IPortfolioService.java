@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
-import com.paraparp.gestorfondos.model.entity.Lot;
 
 @Service
 public interface IPortfolioService {
@@ -22,5 +22,11 @@ public interface IPortfolioService {
 	public List<PortfolioDTO> findByIdUser(Long userId);
 
 	public List<LotDTO> findLotsByPorfolio(Long portfolioId);
+
+	public List<String> listBrokersByPortfolio(Long idPortfolio);
+
+	public List<String> listTypesByPortfolio(Long idPortfolio);
+
+	public List<DailyCostDTO> findCostPortfolio(Long portfolioId);
 
 }

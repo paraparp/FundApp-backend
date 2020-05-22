@@ -9,13 +9,15 @@ public class Util2 {
 
 		BigDecimal result = BigDecimal.ZERO;
 
-		try {
+		try 
+		{
 			result = bd1.divide(bd2, 4, RoundingMode.HALF_UP);
-		} catch (Exception e) {
+		} 
+		catch (Exception e) 
+		{
 			result = BigDecimal.ZERO;
 		}
 
-		System.out.println(result);
 		return result;
 	}
 

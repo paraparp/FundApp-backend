@@ -1,6 +1,7 @@
 package com.paraparp.gestorfondos.service.imp;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,4 +81,35 @@ public class LotService implements ILotService {
 		return lotsDTO;
 
 	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<LotDTO> findBySymbolAndPortfolioAndBrokerAndType(Symbol symbol, Long idPortfolio, String broker,
+			String type) {
+
+		if (broker.isEmpty())
+			broker = null;
+		if (type.isEmpty())
+			type = null;
+		List<LotDTO> lotsDTO = new ArrayList<LotDTO>();
+		List<Lot> lotsBack = lotRepository.findBySymbolAndPortfolioAndBrokerAndType(symbol, idPortfolio, broker, type);
+
+		lotsBack.forEach(lot -> lotsDTO.add(this.modelMapper.map(lot, LotDTO.class)));
+
+		return lotsDTO;
+
+	}
+
+	@Override
+	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, Date endDate) {
+
+		List<LotDTO> listLots = findBySymbolAndPortfolio(symbol, idPortfolio);
+		listLots.forEach(lot -> {
+			if (lot.getDate().before(endDate))
+				listLots.remove(lot);
+		});
+
+		return null;
+	}
+
 }

@@ -10,8 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
 
 import lombok.Data;
 
@@ -47,6 +45,18 @@ public class Symbol implements Serializable {
 	private String location;
 
 	private String type;
+
+	@Column(name = "daily_change",columnDefinition = "decimal(18,2) default 0")
+	private BigDecimal dailyChange = BigDecimal.ZERO;
+
+	@Column(name = "daily_change_percent",columnDefinition = "decimal(18,4) default 0")
+	private BigDecimal dailyChangePercent ;
+	
+	@Column(name = "one_year",columnDefinition = "decimal(18,4) default 0")
+	private BigDecimal oneYear;
+	
+	@Column(name = "five_years",columnDefinition = "decimal(18,4) default 0")
+	private BigDecimal fiveYears;
 
 //	@Column(name = "creation_date")
 //	@Temporal(TemporalType.DATE)

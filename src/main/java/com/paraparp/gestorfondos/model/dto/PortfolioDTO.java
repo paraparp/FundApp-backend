@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paraparp.gestorfondos.util.Util2;
 
 import lombok.Data;
 
 @Data
-
 public class PortfolioDTO {
 
 	private long id;
