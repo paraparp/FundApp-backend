@@ -1,6 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class SymbolUpdaterService {
 		symbol.setIsin(bd.getIsin());
 		symbol.setLastPrice(bd.getLastPrice());
 		symbol.setLastDate(bd.getUpdatedAt());
-		symbol.setUpdated(new Date());
+		symbol.setUpdated(LocalDate.now());
 		symbol.setCategory(bd.getCategory());
 		symbol.setType(bd.getType());
 		symbol.setLocation(bd.getLocation());

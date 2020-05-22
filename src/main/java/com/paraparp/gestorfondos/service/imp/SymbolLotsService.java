@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -124,7 +125,7 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 		for (Symbol symbol : hashSet) {
 
-				List<LotDTO> lots = lotService.findBySymbolAndPortfolioBeforeDate(symbol, idPortfolio,endDate);
+				List<LotDTO> lots = lotService.findBySymbolAndPortfolioBeforeDate(symbol, idPortfolio,LocalDate.parse(endDate));
 		
 				SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
 				symbolLotsDTO.setLots(lots);

@@ -1,8 +1,6 @@
 package com.paraparp.gestorfondos.model.dto;
 
-import java.util.Date;
-
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+import java.time.LocalDate;
 
 import lombok.Data;
 
@@ -15,7 +13,7 @@ public class UserDTO {
 	private String lastName;
 	private String username;
 	private String email;	
-	private Date creationDate;
+	private LocalDate creationDate;
 	private String password;
 	private boolean google;
 	private boolean enabled;

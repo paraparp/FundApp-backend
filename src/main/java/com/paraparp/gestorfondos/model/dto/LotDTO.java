@@ -1,6 +1,7 @@
 package com.paraparp.gestorfondos.model.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 import com.paraparp.gestorfondos.model.entity.Symbol;
@@ -15,7 +16,7 @@ public class LotDTO {
 	private BigDecimal volume;
 	private BigDecimal price;
 	private String broker;
-	private Date date;
+	private LocalDate date;
 	private Long idPortfolio;
 	private Date creationDate;
 

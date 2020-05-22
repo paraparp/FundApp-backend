@@ -1,10 +1,9 @@
 package com.paraparp.gestorfondos.model.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.paraparp.gestorfondos.util.Util2;
 
 import lombok.Data;
@@ -19,7 +18,7 @@ public class PortfolioDTO {
 	private Long idUser;
 
 	private List<LotDTO> lots;
-	private Date creationDate;
+	private LocalDate creationDate;
 
 	public BigDecimal getCost() {
 

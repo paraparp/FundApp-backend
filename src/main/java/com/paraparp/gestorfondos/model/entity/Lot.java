@@ -2,7 +2,7 @@ package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -45,15 +43,13 @@ public class Lot implements Serializable {
 
 	private String broker;
 	
-	@Temporal(TemporalType.DATE)
-	private Date date;
+	private LocalDate date;
 
 	@JsonIgnore
 	@OneToOne
 	private Portfolio portfolio;
 
 	@Column(name = "creation_date")
-	@Temporal(TemporalType.DATE)
-	private Date creationDate;
+	private LocalDate creationDate;
 
 }

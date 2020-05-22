@@ -6,8 +6,6 @@ import java.time.LocalDate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import lombok.Data;
-
 
 public class DailyCostDTO {
 	

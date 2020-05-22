@@ -1,7 +1,7 @@
 package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -54,8 +54,7 @@ public class User implements Serializable {
 	private String email;
 
 	@Column(name = "creation_date")
-	@Temporal(TemporalType.DATE)
-	private Date creationDate;
+	private LocalDate creationDate;
 
 	@Column(name = "password", length = 100, nullable = false)
 	private String password;

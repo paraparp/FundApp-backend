@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -101,11 +102,11 @@ public class LotService implements ILotService {
 	}
 
 	@Override
-	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, Date endDate) {
+	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, LocalDate endDate) {
 
 		List<LotDTO> listLots = findBySymbolAndPortfolio(symbol, idPortfolio);
 		listLots.forEach(lot -> {
-			if (lot.getDate().before(endDate))
+			if (lot.getDate().isBefore(endDate))
 				listLots.remove(lot);
 		});
 

@@ -1,7 +1,7 @@
 package com.paraparp.gestorfondos.model.dto;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -14,7 +14,7 @@ import lombok.Data;
 public class SimpleLotDTO {
 	
 	@Temporal(TemporalType.DATE)
-	private Date date;
+	private LocalDate date;
 	@JsonIgnore
 	private BigDecimal volume;
 	@JsonIgnore
@@ -26,7 +26,7 @@ public class SimpleLotDTO {
 		return volume.multiply(price);
 	}
 
-	public SimpleLotDTO(Date date, BigDecimal volume, BigDecimal price, BigDecimal total) {
+	public SimpleLotDTO(LocalDate date, BigDecimal volume, BigDecimal price, BigDecimal total) {
 		super();
 		this.date = date;
 		this.volume = volume;

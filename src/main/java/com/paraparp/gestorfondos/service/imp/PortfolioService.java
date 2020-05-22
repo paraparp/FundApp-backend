@@ -155,7 +155,7 @@ public class PortfolioService implements IPortfolioService {
 			
 			BigDecimal totalDay = BigDecimal.ZERO;			
 			for (Lot lot : lotsBack) {
-				if(lot.getDate().before(java.sql.Date.valueOf(dailyCost.getDate()))){
+				if(lot.getDate().isBefore(dailyCost.getDate())){
 					totalDay= totalDay.add(lot.getPrice().multiply(lot.getVolume()));
 				}
 			}

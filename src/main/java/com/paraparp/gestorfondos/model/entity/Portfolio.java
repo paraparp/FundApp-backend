@@ -1,7 +1,7 @@
 package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -49,7 +49,6 @@ public class Portfolio implements Serializable {
 	private List<Lot> lots;
 
 	@Column(name = "creation_date")
-	@Temporal(TemporalType.DATE)
-	private Date creationDate;
+	private LocalDate creationDate;
 //	  private final LocalDateTime createdAt = LocalDateTime.now();
 }

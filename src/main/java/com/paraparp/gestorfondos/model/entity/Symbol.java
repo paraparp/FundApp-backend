@@ -2,7 +2,7 @@ package com.paraparp.gestorfondos.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +38,7 @@ public class Symbol implements Serializable {
     @Column(name = "last_price",columnDefinition = "decimal(18,2) default 0")
 	private BigDecimal lastPrice = BigDecimal.ZERO;
 
-	private Date updated;
+	private LocalDate updated;
 
 	private String category;
 

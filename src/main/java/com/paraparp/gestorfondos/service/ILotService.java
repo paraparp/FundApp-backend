@@ -1,6 +1,6 @@
 package com.paraparp.gestorfondos.service;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public interface ILotService {
 
 	public List<LotDTO> findBySymbolAndPortfolio(Symbol symbol, Long idPortfolio);
 	
-	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, Date endDate);
+	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, LocalDate endDate);
 
 	public 	List<LotDTO> findBySymbolAndPortfolioAndBrokerAndType(Symbol symbol, Long idPortfolio, String broker, String type);
 
