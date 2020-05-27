@@ -1,7 +1,9 @@
 package com.paraparp.gestorfondos.service;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.stereotype.Service;
 
 import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
@@ -27,6 +29,6 @@ public interface IPortfolioService {
 
 	public List<String> listTypesByPortfolio(Long idPortfolio);
 
-	public List<DailyCostDTO> findCostPortfolio(Long portfolioId);
+	public List<DailyCostDTO> findCostPortfolio(Long portfolioId) throws IOException, JSONException;
 
 }

@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -17,6 +18,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,13 +29,16 @@ import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
 import com.paraparp.gestorfondos.model.dto.SimpleLotDTO;
+import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Lot;
 import com.paraparp.gestorfondos.model.entity.Portfolio;
 import com.paraparp.gestorfondos.model.entity.User;
 import com.paraparp.gestorfondos.repository.ILotRepository;
 import com.paraparp.gestorfondos.repository.IPortfolioRepository;
 import com.paraparp.gestorfondos.repository.IUserRepository;
+import com.paraparp.gestorfondos.service.IMorningStartService;
 import com.paraparp.gestorfondos.service.IPortfolioService;
+import com.paraparp.gestorfondos.service.ISymbolLotsService;
 
 @Service
 public class PortfolioService implements IPortfolioService {
@@ -47,6 +53,12 @@ public class PortfolioService implements IPortfolioService {
 
 	@Autowired
 	private IUserRepository userRepo;
+
+	@Autowired
+	private ISymbolLotsService symbolLotsService;
+
+	@Autowired
+	private IMorningStartService msService;
 
 	@Override
 	@Transactional
@@ -136,8 +148,9 @@ public class PortfolioService implements IPortfolioService {
 		return new ArrayList<>(typeList);
 	}
 
-	public List<DailyCostDTO> findCostPortfolio(Long portfolioId) {
+	public List<DailyCostDTO> findCostPortfolio(Long portfolioId) throws IOException, JSONException {
 
+		LocalDate fromDate = LocalDate.of(2020, 3, 01);
 		Portfolio portfolio = portfolioRepo.findById(portfolioId).orElseThrow();
 		Set<SimpleLotDTO> listLots = new HashSet<SimpleLotDTO>();
 		List<Lot> lotsBack = new ArrayList<Lot>();
@@ -146,52 +159,63 @@ public class PortfolioService implements IPortfolioService {
 		BigDecimal total = BigDecimal.ZERO;
 		for (Lot lot : lotsBack) {
 			total = total.add(lot.getPrice().multiply(lot.getVolume()));
-			listLots.add(new SimpleLotDTO(lot.getDate(), lot.getPrice(), lot.getVolume(), lot.getPrice().multiply(lot.getVolume())));
+			listLots.add(new SimpleLotDTO(lot.getDate(), lot.getPrice(), lot.getVolume(),
+					lot.getPrice().multiply(lot.getVolume())));
 		}
-	
-		List<DailyCostDTO> fridaysInRange = listOfSaturdaysFrom(LocalDate.of(2020, 3,1));
+
+		List<DailyCostDTO> fridaysInRange = listOfSaturdaysFrom(fromDate);
 
 		for (DailyCostDTO dailyCost : fridaysInRange) {
+
+			List<SymbolLotDTO> lits = symbolLotsService.findByPortfolioAndEndDate(portfolioId,
+					dailyCost.getDate().toString());
+
+			BigDecimal totalDay = BigDecimal.ZERO;
+			BigDecimal totalValueDay = BigDecimal.ZERO;
+			BigDecimal totalValueDayBond = BigDecimal.ZERO;
 			
-			BigDecimal totalDay = BigDecimal.ZERO;			
-			for (Lot lot : lotsBack) {
-				if(lot.getDate().isBefore(dailyCost.getDate())){
-					totalDay= totalDay.add(lot.getPrice().multiply(lot.getVolume()));
+			for (SymbolLotDTO symbols : lits) {
+
+				totalDay = totalDay.add(symbols.getCost());
+				totalValueDay = totalValueDay.add(symbols.getValue().subtract(symbols.getCost()));
+				
+				if(StringUtils.isAllEmpty(symbols.getSymbol().getType()) && symbols.getSymbol().getType().contains("Bond")) {
+					
+					totalValueDayBond = totalValueDayBond.add(symbols.getCost());
 				}
+
 			}
-			dailyCost.setTotal(totalDay);
+
+			dailyCost.setTotalCost(totalDay);
+			dailyCost.setTotalGain(totalValueDay);
+			dailyCost.setBondPercent((totalValueDayBond == BigDecimal.ZERO ||  totalValueDay == BigDecimal.ZERO) ?BigDecimal.ZERO : totalValueDayBond.divide(totalValueDay));
 		}
 
-		
-//		Map<Object, List<LocalDate>> maplot =
-//				fridaysInRange.stream().collect(Collectors.groupingBy(w -> w));
-
-		return  fridaysInRange;
+		return fridaysInRange;
 	}
 
-	
-	
 	/**
 	 * crea una lista con todos los sabados de un rango
+	 * 
 	 * @return
 	 */
 	private List<DailyCostDTO> listOfSaturdaysFrom(LocalDate start) {
-		
-		
-		LocalDate end = LocalDate.now().plusDays(7);
 
-	    DayOfWeek dowOfStart = start.getDayOfWeek();
-	    int difference = DayOfWeek.SATURDAY.getValue() - dowOfStart.getValue();
-	    if (difference < 0) difference += 7;
+		LocalDate end = LocalDate.now();
 
-	    List<DailyCostDTO> fridaysInRange = new ArrayList<DailyCostDTO>();
+		DayOfWeek dowOfStart = start.getDayOfWeek();
+		int difference = DayOfWeek.FRIDAY.getValue() - dowOfStart.getValue();
+		if (difference < 0)
+			difference += 7;
 
-	    LocalDate currentFriday = start.plusDays(difference);
-	    do {
-	        fridaysInRange.add(new DailyCostDTO(currentFriday,  BigDecimal.ZERO));
-	        currentFriday = currentFriday.plusDays(7);
-	    } while (currentFriday.isBefore(end));
-	    
+		List<DailyCostDTO> fridaysInRange = new ArrayList<DailyCostDTO>();
+
+		LocalDate currentFriday = start.plusDays(difference);
+		do {
+			fridaysInRange.add(new DailyCostDTO(currentFriday, BigDecimal.ZERO, BigDecimal.ZERO));
+			currentFriday = currentFriday.plusDays(7);
+		} while (currentFriday.isBefore(end));
+
 		return fridaysInRange;
 	}
 

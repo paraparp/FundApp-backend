@@ -1,11 +1,11 @@
 insert into users (first_name, last_name, username, password, email, creation_date)
-values('Rodrigo','Parapar','dobarqueiro', '$2a$10$1fI7b7iULrwzuHCNeLPfD.sTieqfA4asBu7VZJNxBpty1maoU.Byq', 'dobarqueiro@gmail.com', NOW());
+values('Rodrigo','Parapar','dobarqueiro', '$2a$10$1fI7b7iULrwzuHCNeLPfD.sTieqfA4asBu7VZJNxBpty1maoU.Byq', 'dobarqueiro@gmail.com', '');
 insert into users (first_name, last_name, username, password, email, creation_date)
-values('Pepe','Jons','pepe12', '$2a$10$ZYIh6aLdLpwWzf22ExiZjuygpZVVprm9gLDntiPgRKSLic.zPp6jm','test@gmail.com', NOW());
+values('Pepe','Jons','pepe12', '$2a$10$ZYIh6aLdLpwWzf22ExiZjuygpZVVprm9gLDntiPgRKSLic.zPp6jm','test@gmail.com', '');
 insert into users (first_name, last_name, username, password, email, creation_date)
-values('Juan','Parapar','juna34', '$2a$10$KosOZ0T9bw0ztF7jpXz6ZuILIV6dFB/8EzGJe.PbJTK5LMA20t0Ku','test3@gmail.com',NOW());
+values('Juan','Parapar','juna34', '$2a$10$KosOZ0T9bw0ztF7jpXz6ZuILIV6dFB/8EzGJe.PbJTK5LMA20t0Ku','test3@gmail.com','');
 insert into users (first_name, last_name, username, password, email, creation_date)
-values('Marta','Lunes','mar456', '$2a$10$bl6zMQbKkb6a14vZDRQ8n.NVKUCz0XF47AkDW04ZLI/AblO8uttPe','est4@gmail.com', NOW());
+values('Marta','Lunes','mar456', '$2a$10$bl6zMQbKkb6a14vZDRQ8n.NVKUCz0XF47AkDW04ZLI/AblO8uttPe','est4@gmail.com', '');
 
 
 INSERT INTO roles (name) VALUES ('ROLE_USER');
@@ -21,19 +21,19 @@ INSERT INTO portfolios (name,description, user_id) VALUES ('Otros fondos ', 'Lis
 INSERT INTO portfolios (name,description, user_id) VALUES ('Otros fondos 2', 'Lista con los otros fondos', 1);
 
 
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (1,'Vanguard Global Stock Index Fund','IE00B03HCZ61', 'VANGLVI:ID',  'https://www.bloomberg.com/quote/VANGLVI:ID');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 2,'Vanguard European Stock Index Fund','IE0007987690', 'VANEIEI:ID',  'https://www.bloomberg.com/quote/VANEIEI:ID');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 3, 'Vanguard Emerging Markets Stock Index Fund','IE0031786142', 'VANEMSI:ID', 'https://www.bloomberg.com/quote/VANEMSI:ID');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (4, 'iShares Japan Index Fund (IE) D Acc EUR','IE00BDRK7T12','VANEMSI:ID' ,'https://www.bloomberg.com/quote/BGIJDEA:ID');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (5,'Amundi Index MSCI World - AE (C)','LU0996182563', 'AMIEAEC:LX', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES (6, 'Amundi Index MSCI EMU - AE (C)','LU0389811372', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 7,'Amundi Funds Index Equity Emerging Markets - AE (C)','LU0996177134', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 8,'Vanguard Global Bond Index Fund - Investor Hedged','IE00BGCZ0933', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 9,'Amundi Index J.P. Morgan EMU Govies IG - AE (C)','LU1050470373', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 10,'Vanguard Eurozone Inflation-Linked Bond Index Fund (Inv)','IE00B04GQQ17', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 11,'','IE00B18GC888', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 12,'','LU1328852659', '', '');
-INSERT INTO symbols (id, name,isin, bloomberg,url) VALUES ( 13,'','IE00B83YJG36', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ('Vanguard Global Stock Index Fund','IE00B03HCZ61', 'VANGLVI:ID',  'https://www.bloomberg.com/quote/VANGLVI:ID');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Vanguard European Stock Index Fund','IE0007987690', 'VANEIEI:ID',  'https://www.bloomberg.com/quote/VANEIEI:ID');
+INSERT INTO symbols (name,isin, morningstar, url) VALUES (  'Vanguard Emerging Markets Stock Index Fund','IE0031786142', 'VANEMSI:ID', 'https://www.bloomberg.com/quote/VANEMSI:ID');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'iShares Japan Index Fund (IE) D Acc EUR','IE00BDRK7T12','VANEMSI:ID' ,'https://www.bloomberg.com/quote/BGIJDEA:ID');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ('Amundi Index MSCI World - AE (C)','LU0996182563', 'AMIEAEC:LX', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Amundi Index MSCI EMU - AE (C)','LU0389811372', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Amundi Funds Index Equity Emerging Markets - AE (C)','LU0996177134', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Vanguard Global Bond Index Fund - Investor Hedged','IE00BGCZ0933', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Amundi Index J.P. Morgan EMU Govies IG - AE (C)','LU1050470373', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( 'Vanguard Eurozone Inflation-Linked Bond Index Fund (Inv)','IE00B04GQQ17', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( '','IE00B18GC888', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( '','LU1328852659', '', '');
+INSERT INTO symbols ( name,isin, morningstar, url) VALUES ( '','IE00B83YJG36', '', '');
 
 
 INSERT INTO lots (symbol_id, volume, price, broker,portfolio_id, date) VALUES ( 1, 42.920, 23.2943, 'MyInvestor', 1, '2020-03-13');

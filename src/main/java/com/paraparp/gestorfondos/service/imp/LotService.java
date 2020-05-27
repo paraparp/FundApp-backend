@@ -104,13 +104,14 @@ public class LotService implements ILotService {
 	@Override
 	public List<LotDTO> findBySymbolAndPortfolioBeforeDate(Symbol symbol, Long idPortfolio, LocalDate endDate) {
 
-		List<LotDTO> listLots = findBySymbolAndPortfolio(symbol, idPortfolio);
-		listLots.forEach(lot -> {
-			if (lot.getDate().isBefore(endDate))
-				listLots.remove(lot);
+		List<Lot> lotsBack = lotRepository.findBySymbolAndPortfolio(symbol, idPortfolio);
+		List<LotDTO> lotsDTO = new ArrayList<LotDTO>();
+		lotsBack.forEach(lot -> {
+			if (lot.getDate().isBefore(endDate.plusDays(1))) {
+				lotsDTO.add(this.modelMapper.map(lot, LotDTO.class));}
 		});
-
-		return null;
+//TODO hay que settear el valor del symbolo para esta fecha
+		return lotsDTO;
 	}
 
 }

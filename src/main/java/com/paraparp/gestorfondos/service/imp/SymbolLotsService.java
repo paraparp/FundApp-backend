@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +29,9 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 	@Autowired
 	private ILotService lotService;
+	
+	@Autowired
+	private MorningStarService msService;
 
 	@Override
 	@Transactional
@@ -71,6 +77,7 @@ public class SymbolLotsService implements ISymbolLotsService {
 			SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
 			symbolLotsDTO.setLots(lots);
 			symbolLotsDTO.setPortfolio(portfolio);
+			
 			symbolLotsDTO.setSymbol(symbol);
 
 			if (symbolLotsDTO.getLots().size() > 0)
@@ -112,8 +119,10 @@ public class SymbolLotsService implements ISymbolLotsService {
 	@Override
 	@Transactional
 	public List<SymbolLotDTO> findByPortfolioAndEndDate(Long idPortfolio, String endDate) {
-		
-		
+
+		LocalDate endLocalDate = LocalDate.now();
+		if (endDate != null)
+			endLocalDate = LocalDate.parse(endDate);
 
 		PortfolioDTO portfolio = porfolioSrv.findById(idPortfolio);
 		List<LotDTO> lotsPorfolio = portfolio.getLots();
@@ -125,16 +134,22 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 		for (Symbol symbol : hashSet) {
 
-				List<LotDTO> lots = lotService.findBySymbolAndPortfolioBeforeDate(symbol, idPortfolio,LocalDate.parse(endDate));
-		
+			List<LotDTO> lots = lotService.findBySymbolAndPortfolioBeforeDate(symbol, idPortfolio, endLocalDate);
+			if (lots.size() != 0) {
 				SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
+
 				symbolLotsDTO.setLots(lots);
 				symbolLotsDTO.setPortfolio(portfolio);
+				try {
+					symbol.setLastPrice(msService.getPriceDate(endDate,  symbol.getIsin()));
+				} catch (IOException | JSONException e) {
+					e.printStackTrace();
+				}
 				symbolLotsDTO.setSymbol(symbol);
 
 				symbolLots.add(symbolLotsDTO);
+			}
 
-			
 		}
 
 		return symbolLots;

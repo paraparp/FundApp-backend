@@ -20,23 +20,23 @@ public class SymbolLotDTO {
 	@JsonIgnore
 	private List<LotDTO> lots;
 
-	
-	
 	public BigDecimal getVolume() {
 
 		BigDecimal volume = BigDecimal.ZERO;
-		for (LotDTO lot : lots) {
-			volume = volume.add(lot.getVolume());
+
+		if (lots != null) {
+			for (LotDTO lot : lots) {
+				volume = volume.add(lot.getVolume());
+			}
 		}
-	
 		return volume;
 	}
 
 	public BigDecimal getValue() {
-		
-		BigDecimal value =  getVolume().multiply(symbol.getLastPrice()); 
-		
-		 return (value.compareTo(BigDecimal.ZERO)!=0) ? value : getCost();
+
+		BigDecimal value = getVolume().multiply(symbol.getLastPrice());
+
+		return (value.compareTo(BigDecimal.ZERO) != 0) ? value : getCost();
 	}
 
 	public BigDecimal getCost() {

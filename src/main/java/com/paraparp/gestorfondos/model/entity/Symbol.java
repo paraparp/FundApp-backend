@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
 
 import lombok.Data;
 
@@ -28,14 +29,15 @@ public class Symbol implements Serializable {
 
 	private String isin;
 
-	private String bloomberg;
+	private String morningstar;
 
 	private String url;
 
 	@Column(name = "last_date")
 	private String lastDate;
 
-    @Column(name = "last_price",columnDefinition = "decimal(18,2) default 0")
+	@Column(name = "last_price")
+	@Digits(integer = 18, fraction = 4)
 	private BigDecimal lastPrice = BigDecimal.ZERO;
 
 	private LocalDate updated;
@@ -46,17 +48,21 @@ public class Symbol implements Serializable {
 
 	private String type;
 
-	@Column(name = "daily_change",columnDefinition = "decimal(18,2) default 0")
+	@Column(name = "daily_change")
+	@Digits(integer = 18, fraction =4)
 	private BigDecimal dailyChange = BigDecimal.ZERO;
 
-	@Column(name = "daily_change_percent",columnDefinition = "decimal(18,4) default 0")
-	private BigDecimal dailyChangePercent ;
-	
-	@Column(name = "one_year",columnDefinition = "decimal(18,4) default 0")
-	private BigDecimal oneYear;
-	
-	@Column(name = "five_years",columnDefinition = "decimal(18,4) default 0")
-	private BigDecimal fiveYears;
+	@Column(name = "daily_change_percent")
+	@Digits(integer = 18, fraction = 4)
+	private BigDecimal dailyChangePercent = BigDecimal.ZERO;
+
+	@Column(name = "one_year")
+	@Digits(integer = 18, fraction = 4)
+	private BigDecimal oneYear = BigDecimal.ZERO;
+
+	@Column(name = "five_years")
+	@Digits(integer = 18, fraction = 4)
+	private BigDecimal fiveYears = BigDecimal.ZERO;
 
 //	@Column(name = "creation_date")
 //	@Temporal(TemporalType.DATE)

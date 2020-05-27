@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Digits;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,12 +35,12 @@ public class Lot implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Symbol symbol;
 
-    @Column(columnDefinition = "decimal(18,2) default 0")
-	private BigDecimal volume;
+	@Digits(integer=18, fraction=2)   
+	private BigDecimal volume = BigDecimal.ZERO;
 
 
-    @Column(columnDefinition = "decimal(18,2) default 0")
-	private BigDecimal price;
+    @Digits(integer=18, fraction=2)   
+	private BigDecimal price = BigDecimal.ZERO;;
 
 	private String broker;
 	

@@ -1,5 +1,6 @@
 package com.paraparp.gestorfondos.controller;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.Set;
 
 import javax.validation.Valid;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -67,13 +69,13 @@ public class PortfolioController {
 
 	@GetMapping("/{id}/lots/cost")
 	public ResponseEntity<List<DailyCostDTO>> getCost(@PathVariable(value = "id") Long portfolioId)
-			throws ResourceNotFoundException {
+			throws ResourceNotFoundException, IOException, JSONException {
 		return ResponseEntity.ok().body(portfolioService.findCostPortfolio(portfolioId));
 	}
 
 	@GetMapping("/{id}/lots/date")
 	public ResponseEntity<List<SymbolLotDTO>> getSymbolBeforeDate(@PathVariable(value = "id") Long portfolioId,
-			@RequestParam(value = "end-date", required = false) String endDate) throws ResourceNotFoundException {
+			@RequestParam(value = "enddate", required = false) String endDate) throws ResourceNotFoundException {
 		return ResponseEntity.ok().body(symbolLotsService.findByPortfolioAndEndDate(portfolioId, endDate));
 	}
 
