@@ -20,8 +20,9 @@ public class SymbolService implements ISymbolService {
 
 	@Override
 	public Symbol findById(Long id) {
-
 		return null;
+
+	
 	}
 
 	@Override
@@ -50,8 +51,7 @@ public class SymbolService implements ISymbolService {
 
 	@Override
 	public Symbol findByIsin(String isin) {
-		// TODO Auto-generated method stub
-		return null;
+		return symbolRepository.findByIsin(isin);
 	}
 
 

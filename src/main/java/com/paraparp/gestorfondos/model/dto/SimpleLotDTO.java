@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Data
 public class SimpleLotDTO {
-	
+
 	@Temporal(TemporalType.DATE)
 	private LocalDate date;
 	@JsonIgnore
@@ -33,6 +33,5 @@ public class SimpleLotDTO {
 		this.price = price;
 		this.total = total;
 	}
-
 
 }

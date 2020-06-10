@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.paraparp.gestorfondos.service.imp.MorningStarService;
 import com.paraparp.gestorfondos.service.imp.SymbolUpdaterService;
 
 @Component
@@ -14,6 +15,10 @@ public class Scheduler {
 
 	@Autowired
 	private SymbolUpdaterService updateService;
+	
+	@Autowired
+	private MorningStarService msService;
+	
 //Everyday each 3 hours from 12h
 	@Scheduled(cron = "0 0 0/2 ? * *")
 	public void fixedDelaySch() {
@@ -24,6 +29,7 @@ public class Scheduler {
 		System.out.println("Fixed Delay scheduler:: " + strDate);
 		try {
 			updateService.updater();
+			msService.getAllSymbolsHistorical();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

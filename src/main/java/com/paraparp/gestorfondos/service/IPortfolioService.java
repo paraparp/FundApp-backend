@@ -30,5 +30,7 @@ public interface IPortfolioService {
 	public List<String> listTypesByPortfolio(Long idPortfolio);
 
 	public List<DailyCostDTO> findCostPortfolio(Long portfolioId) throws IOException, JSONException;
+	
+	public String xRayPortfolio(Long idPortfolio ) throws IOException, JSONException;
 
 }

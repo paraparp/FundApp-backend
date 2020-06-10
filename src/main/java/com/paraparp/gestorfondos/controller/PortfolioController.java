@@ -60,7 +60,13 @@ public class PortfolioController {
 		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
 		return ResponseEntity.ok().body(portfolio);
 	}
-
+	
+	@GetMapping("/{id}/xray")
+	public ResponseEntity<String> xRayPortfolio(@PathVariable(value = "id") Long portfolioId)
+			throws ResourceNotFoundException, IOException, JSONException {
+		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
+		return ResponseEntity.ok().body(portfolioService.xRayPortfolio(portfolioId));
+	}
 	@GetMapping("/{id}/lots")
 	public ResponseEntity<List<LotDTO>> getLotsByPorfolio(@PathVariable(value = "id") Long portfolioId)
 			throws ResourceNotFoundException {
@@ -75,7 +81,7 @@ public class PortfolioController {
 
 	@GetMapping("/{id}/lots/date")
 	public ResponseEntity<List<SymbolLotDTO>> getSymbolBeforeDate(@PathVariable(value = "id") Long portfolioId,
-			@RequestParam(value = "enddate", required = false) String endDate) throws ResourceNotFoundException {
+			@RequestParam(value = "enddate", required = false) String endDate) throws ResourceNotFoundException, IOException, JSONException {
 		return ResponseEntity.ok().body(symbolLotsService.findByPortfolioAndEndDate(portfolioId, endDate));
 	}
 

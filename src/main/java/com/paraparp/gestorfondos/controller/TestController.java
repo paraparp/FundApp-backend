@@ -19,6 +19,7 @@ import com.paraparp.gestorfondos.model.dto.HistoryDetail;
 import com.paraparp.gestorfondos.service.imp.MorningStarService;
 import com.paraparp.gestorfondos.util.UtilJSON;
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class TestController {
 //		String json2 = msService.getPriceDate(LocalDate.now().plusDays(-1).toString(), "IE00B03HCZ61").toString();
 		
 		
-		String json2 = msService.getLastPrice( "IE00B03HCZ61").toString();
+		String json2 = msService.getSymbolInfo( "IE00B03HCZ61").toString();
 	
 //		ArrayList jsonObjList = googleJson.fromJson(json2, ArrayList.class);
 //		System.out.println("List size is : " + jsonObjList.size());
@@ -74,7 +75,15 @@ public class TestController {
 	@RequestMapping(value = "/{isin}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public String getMorningStarID(@PathVariable(value = "isin") String isin) throws IOException, JSONException, ParseException {
 
-		return msService.getPriceDate("2020-02-14", isin).toString();
+	
+		return 	 msService.getSymbolInfo( "IE00B03HCZ61").toString();
 	}
+	
+	
+	@RequestMapping(value = "/{isin}/{date}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public BigDecimal getPriceByDate(@PathVariable(value = "isin") String isin,@PathVariable(value = "date") String date) throws IOException, JSONException, ParseException {
 
+	
+		return 	 msService.getPriceDate( date,isin);
+	}
 }

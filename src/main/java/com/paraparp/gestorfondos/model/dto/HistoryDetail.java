@@ -6,8 +6,7 @@ import lombok.Data;
 
 @Data
 public class HistoryDetail {
-	
-	
+
 	@JsonProperty("EndDate")
 	private String EndDate;
 	@JsonProperty("OriginalDate")

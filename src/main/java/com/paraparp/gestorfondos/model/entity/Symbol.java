@@ -3,14 +3,21 @@ package com.paraparp.gestorfondos.model.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Data;
 
@@ -63,6 +70,11 @@ public class Symbol implements Serializable {
 	@Column(name = "five_years")
 	@Digits(integer = 18, fraction = 4)
 	private BigDecimal fiveYears = BigDecimal.ZERO;
+	
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "symbol_id")
+	private List<Historical> historical;
 
 //	@Column(name = "creation_date")
 //	@Temporal(TemporalType.DATE)

@@ -1,13 +1,16 @@
 package com.paraparp.gestorfondos.service.imp;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paraparp.gestorfondos.model.entity.Symbol;
 import com.paraparp.gestorfondos.repository.ISymbolRepository;
+import com.paraparp.gestorfondos.service.IMorningStartService;
 import com.paraparp.gestorfondos.util.ExtraData;
 import com.paraparp.gestorfondos.util.Util;
 
@@ -16,8 +19,11 @@ public class SymbolUpdaterService {
 
 	@Autowired
 	private ISymbolRepository respository;
+	
+	@Autowired
+	private MorningStarService msService;
 
-	public String updater() {
+	public String updater() throws IOException, JSONException {
 
 		List<Symbol> symbols = respository.findAll();
 
@@ -44,6 +50,8 @@ public class SymbolUpdaterService {
 			}
 		}
 		respository.saveAll(symbols);
+		
+		msService.getAllSymbolsHistorical(); //TODO actualizamos historiales
 
 		return "Symbols : " + symbols.size() + " ===> Updated :  " + updated;
 	}
@@ -55,7 +63,7 @@ public class SymbolUpdaterService {
 
 		if (symbolBack != null) {
 			System.out.println("Symbol already exists " + symbolBack.getIsin());
-			return null;
+			return null;//TODO hay que lanza error
 		}
 
 		ExtraData bd = null;

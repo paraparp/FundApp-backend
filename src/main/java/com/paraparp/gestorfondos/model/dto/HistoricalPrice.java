@@ -6,8 +6,8 @@ import lombok.Data;
 
 @Data
 public class HistoricalPrice {
-	
+
 	private String Id;
-	private List <HistoryDetail> historyDetail;
+	private List<HistoryDetail> historyDetail;
 
 }

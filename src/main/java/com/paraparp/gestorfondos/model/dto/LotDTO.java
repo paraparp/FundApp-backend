@@ -20,14 +20,13 @@ public class LotDTO {
 	private Long idPortfolio;
 	private Date creationDate;
 
-
 	public BigDecimal getValue() {
-		return  volume.multiply(symbol.getLastPrice());
+		return (volume == null || symbol.getLastPrice() == null) ? BigDecimal.ZERO
+				: volume.multiply(symbol.getLastPrice());
 	}
 
 	public BigDecimal getCost() {
 		return volume.multiply(price);
 	}
-	
-}
 
+}

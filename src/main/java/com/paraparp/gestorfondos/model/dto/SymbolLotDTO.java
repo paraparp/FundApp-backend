@@ -33,8 +33,9 @@ public class SymbolLotDTO {
 	}
 
 	public BigDecimal getValue() {
-
-		BigDecimal value = getVolume().multiply(symbol.getLastPrice());
+		BigDecimal value = BigDecimal.ZERO;
+		if (symbol.getLastPrice() != null)
+			value = getVolume().multiply(symbol.getLastPrice());
 
 		return (value.compareTo(BigDecimal.ZERO) != 0) ? value : getCost();
 	}

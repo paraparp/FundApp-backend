@@ -110,7 +110,7 @@ public class LotService implements ILotService {
 			if (lot.getDate().isBefore(endDate.plusDays(1))) {
 				lotsDTO.add(this.modelMapper.map(lot, LotDTO.class));}
 		});
-//TODO hay que settear el valor del symbolo para esta fecha
+		
 		return lotsDTO;
 	}
 

@@ -19,10 +19,8 @@ public class DailyCostDTO {
 	private BigDecimal totalCost;
 
 	private BigDecimal totalGain;
-	
+
 	private BigDecimal bondPercent;
-
-
 
 	public DailyCostDTO(LocalDate date, BigDecimal totalCost, BigDecimal totalGain) {
 

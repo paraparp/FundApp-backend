@@ -1,14 +1,13 @@
 package com.paraparp.gestorfondos.service.imp;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +17,7 @@ import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
 import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Symbol;
+import com.paraparp.gestorfondos.service.IHistoricalService;
 import com.paraparp.gestorfondos.service.ILotService;
 import com.paraparp.gestorfondos.service.ISymbolLotsService;
 
@@ -29,9 +29,12 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 	@Autowired
 	private ILotService lotService;
-	
+
 	@Autowired
 	private MorningStarService msService;
+
+	@Autowired
+	private IHistoricalService historicalService;
 
 	@Override
 	@Transactional
@@ -53,8 +56,8 @@ public class SymbolLotsService implements ISymbolLotsService {
 			symbolLotsDTO.setLots(lots);
 			symbolLotsDTO.setPortfolio(portfolio);
 			symbolLotsDTO.setSymbol(symbol);
-
-			symbolLots.add(symbolLotsDTO);
+			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)//TODO se elimian los fonods vendidos con volumen 0
+				symbolLots.add(symbolLotsDTO);
 		}
 
 		return symbolLots;
@@ -77,7 +80,7 @@ public class SymbolLotsService implements ISymbolLotsService {
 			SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
 			symbolLotsDTO.setLots(lots);
 			symbolLotsDTO.setPortfolio(portfolio);
-			
+
 			symbolLotsDTO.setSymbol(symbol);
 
 			if (symbolLotsDTO.getLots().size() > 0)
@@ -108,9 +111,10 @@ public class SymbolLotsService implements ISymbolLotsService {
 			symbolLotsDTO.setPortfolio(portfolio);
 			symbolLotsDTO.setSymbol(symbol);
 
-			if (symbolLotsDTO.getLots().size() > 0)
+//			if (symbolLotsDTO.getLots().size() > 0)
+//				symbolLots.add(symbolLotsDTO);
+			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)//TODO se elimian los fonods vendidos con volumen 0
 				symbolLots.add(symbolLotsDTO);
-
 		}
 
 		return symbolLots;
@@ -118,7 +122,8 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 	@Override
 	@Transactional
-	public List<SymbolLotDTO> findByPortfolioAndEndDate(Long idPortfolio, String endDate) {
+	public List<SymbolLotDTO> findByPortfolioAndEndDate(Long idPortfolio, String endDate)
+			throws IOException, JSONException {
 
 		LocalDate endLocalDate = LocalDate.now();
 		if (endDate != null)
@@ -140,16 +145,15 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 				symbolLotsDTO.setLots(lots);
 				symbolLotsDTO.setPortfolio(portfolio);
-				try {
-					symbol.setLastPrice(msService.getPriceDate(endDate,  symbol.getIsin()));
-				} catch (IOException | JSONException e) {
-					e.printStackTrace();
-				}
+
+//					symbol.setLastPrice(msService.getPriceDate(endDate,  symbol.getIsin()));
+//				Historical hist = historicalService.findBySymbolAndDate(symbol, endLocalDate);
+//				symbol.setLastPrice((hist != null) ? hist.getPrice() : BigDecimal.ZERO);
+
 				symbolLotsDTO.setSymbol(symbol);
 
 				symbolLots.add(symbolLotsDTO);
 			}
-
 		}
 
 		return symbolLots;
