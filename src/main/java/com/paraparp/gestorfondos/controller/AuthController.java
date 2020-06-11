@@ -12,7 +12,7 @@ public class AuthController {
 
 	
 
-	@GetMapping("/")
+	@GetMapping("/log")//TODO ("/")
 	public String login() {
 		return "authenticated successfully";
 	}
