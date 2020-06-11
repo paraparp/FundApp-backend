@@ -34,7 +34,7 @@ import com.paraparp.gestorfondos.service.imp.SymbolUpdaterService;
 import net.minidev.json.parser.ParseException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/symbols")
 public class SymbolController {
 	@Autowired

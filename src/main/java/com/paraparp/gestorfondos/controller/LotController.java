@@ -27,7 +27,7 @@ import com.paraparp.gestorfondos.repository.ILotRepository;
 import com.paraparp.gestorfondos.service.ILotService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/lots")
 public class LotController {
 	

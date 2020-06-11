@@ -26,7 +26,7 @@ import com.paraparp.gestorfondos.repository.IUserRepository;
 import com.paraparp.gestorfondos.service.IUserService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins ="*")
 @RequestMapping("/fundapp/users")
 public class UserController {
 	@Autowired

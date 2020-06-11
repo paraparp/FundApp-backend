@@ -32,7 +32,7 @@ import com.google.gson.reflect.TypeToken;
 import net.minidev.json.parser.ParseException;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/test")
 public class TestController {
 

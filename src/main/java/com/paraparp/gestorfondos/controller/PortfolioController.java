@@ -37,7 +37,7 @@ import com.paraparp.gestorfondos.service.IPortfolioService;
 import com.paraparp.gestorfondos.service.ISymbolLotsService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/portfolios")
 public class PortfolioController {
 	@Autowired
