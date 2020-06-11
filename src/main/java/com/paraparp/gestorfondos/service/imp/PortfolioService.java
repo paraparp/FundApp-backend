@@ -125,10 +125,11 @@ public class PortfolioService implements IPortfolioService {
 
 	public List<LotDTO> findLotsByPorfolio(Long portfolioId) {
 
-		Portfolio portfolio = portfolioRepo.findById(portfolioId).orElseThrow();
+		Optional<Portfolio> portfolio = portfolioRepo.findById(portfolioId);
+//				.orElseThrow();
 		List<LotDTO> listLots = new ArrayList<LotDTO>();
 		List<Lot> lotsBack = new ArrayList<Lot>();
-		lotsBack = this.lotRepo.findByPortfolio(portfolio);
+		lotsBack = this.lotRepo.findByPortfolio(portfolio.get());
 
 		for (Lot lot : lotsBack) {
 			listLots.add(this.modelMapper.map(lot, LotDTO.class));
@@ -158,10 +159,13 @@ public class PortfolioService implements IPortfolioService {
 
 		LocalDate fromDate = this.findFirstTransactionDate(portfolioId).minusDays(14);
 		LocalDate firstFriday = this.getFridayOfThisWeek(fromDate);
-		Portfolio portfolio = portfolioRepo.findById(portfolioId).orElseThrow();
+		
+		Optional<Portfolio> portfolio = portfolioRepo.findById(portfolioId);
+//				.orElseThrow();
+		
 		Set<SimpleLotDTO> listLots = new HashSet<SimpleLotDTO>();
 		List<Lot> lotsBack = new ArrayList<Lot>();
-		lotsBack = this.lotRepo.findByPortfolio(portfolio);
+		lotsBack = this.lotRepo.findByPortfolio(portfolio.get());
 
 		BigDecimal total = BigDecimal.ZERO;
 		for (Lot lot : lotsBack) {
