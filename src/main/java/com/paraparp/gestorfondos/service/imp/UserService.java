@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,8 @@ public class UserService implements IUserService, UserDetailsService {
 	
 	@Autowired
 	private IUserRepository userRepository;
-
+	@Autowired
+	private IUserService serviceRepository;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -44,7 +47,6 @@ public class UserService implements IUserService, UserDetailsService {
 		
 		return listUsers;
 	}
-	
 	
 
 	@Override
@@ -82,17 +84,20 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new UsernameNotFoundException("Error en el login: No existe el usuario: "+ username);
 		}
 	
-		
-
 		List<GrantedAuthority> authorities = user.getRoles()
 				.stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.peek(authority -> logger.info("Role: " + authority.getAuthority()))
 				.collect(Collectors.toList());
-
-		user.getLastName();
+		
 		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 				user.isEnabled(), true, true, true, authorities);
+	}
+
+
+	@Override
+	public User save(@Valid User user) {
+		return serviceRepository.save(user);
 	}
 
 }

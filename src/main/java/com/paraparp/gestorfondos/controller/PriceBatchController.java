@@ -21,7 +21,6 @@ public class PriceBatchController {
 		this.msService.getAllSymbolsHistorical(); // TODO actualizamos historiales
 
 		return "Done";
-
 	}
 
 	@RequestMapping("/invokejob")

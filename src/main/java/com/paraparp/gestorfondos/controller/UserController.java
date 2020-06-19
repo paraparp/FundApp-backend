@@ -47,10 +47,10 @@ public class UserController {
 		return ResponseEntity.ok().body(user);
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_USER" })
+	//@Secured({ "ROLE_ADMIN", "ROLE_USER" })
 	@PostMapping("")
 	public User createUser(@Valid @RequestBody User user) {
-		return userRepository.save(user);
+		return userService.save(user);
 	}
 
 	@Secured({ "ROLE_ADMIN", "ROLE_USER" })

@@ -2,6 +2,8 @@ package com.paraparp.gestorfondos.service;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Service;
 
 import com.paraparp.gestorfondos.model.dto.UserDTO;
@@ -19,5 +21,7 @@ public interface IUserService {
 	public List<UserDTO> findAll();
 
 	public User findByUsername(String username);
+
+	public User save(@Valid User user);
 
 }

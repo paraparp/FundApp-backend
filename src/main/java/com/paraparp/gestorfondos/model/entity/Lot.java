@@ -35,11 +35,11 @@ public class Lot implements Serializable {
 	@ManyToOne(fetch = FetchType.EAGER)
 	private Symbol symbol;
 
-	@Digits(integer=18, fraction=2)   
+	@Digits(integer=18, fraction=4)   
 	private BigDecimal volume = BigDecimal.ZERO;
 
 
-    @Digits(integer=18, fraction=2)   
+    @Digits(integer=18, fraction=4)   
 	private BigDecimal price = BigDecimal.ZERO;;
 
 	private String broker;
