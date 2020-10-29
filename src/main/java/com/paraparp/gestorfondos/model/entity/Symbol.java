@@ -3,6 +3,7 @@ package com.paraparp.gestorfondos.model.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -56,7 +61,7 @@ public class Symbol implements Serializable {
 	private String type;
 
 	@Column(name = "daily_change")
-	@Digits(integer = 18, fraction =4)
+	@Digits(integer = 18, fraction = 4)
 	private BigDecimal dailyChange = BigDecimal.ZERO;
 
 	@Column(name = "daily_change_percent")
@@ -70,14 +75,15 @@ public class Symbol implements Serializable {
 	@Column(name = "five_years")
 	@Digits(integer = 18, fraction = 4)
 	private BigDecimal fiveYears = BigDecimal.ZERO;
-	
+
 	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "symbol_id")
 	private List<Historical> historical;
 
-//	@Column(name = "creation_date")
-//	@Temporal(TemporalType.DATE)
-//	private Date creationDate;
+	@Column(name = "creation_date")
+	@Temporal(TemporalType.DATE)
+	@CreationTimestamp
+	private Date creationDate;
 
 }

@@ -1,12 +1,9 @@
 package com.paraparp.gestorfondos.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -25,11 +22,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
+import com.paraparp.gestorfondos.errors.exceptions.ResourceNotFoundException;
+import com.paraparp.gestorfondos.errors.exceptions.SearchNoResultException;
 import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.dto.PortfolioDTO;
-import com.paraparp.gestorfondos.model.dto.SimpleLotDTO;
 import com.paraparp.gestorfondos.model.dto.SymbolLotDTO;
 import com.paraparp.gestorfondos.model.entity.Portfolio;
 import com.paraparp.gestorfondos.repository.IPortfolioRepository;
@@ -127,15 +124,21 @@ public class PortfolioController {
 	}
 
 	@GetMapping("/watchlist/{id}/{broker}")
-	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdandBroker(
+	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdAndBroker(
 			@PathVariable(value = "id") Long portfolioId, @PathVariable(value = "broker") String broker)
-			throws ResourceNotFoundException {
+			throws ResourceNotFoundException, SearchNoResultException {
+		
 		PortfolioDTO portfolio = this.checkPortfolioDTO(portfolioId);
-		return ResponseEntity.ok().body(symbolLotsService.findByPortfolioAndBroker(portfolioId, broker));
+		if (portfolio==null) throw new ResourceNotFoundException("Portfolio not found for this id :: " + portfolioId);
+		
+		List<SymbolLotDTO> dtoList = symbolLotsService.findByPortfolioAndBroker(portfolioId, broker);
+		if (dtoList.isEmpty()) throw new SearchNoResultException(broker);
+		
+		return ResponseEntity.ok().body(dtoList);
 	}
 
 	@GetMapping("/watchlist/{id}/filters")
-	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdandBrokerAndType(
+	public ResponseEntity<List<SymbolLotDTO>> getPortfolioLotsByIdAndBrokerAndType(
 			@PathVariable(value = "id") Long portfolioId,
 			@RequestParam(value = "broker", required = false) String broker,
 			@RequestParam(value = "type", required = false) String type) throws ResourceNotFoundException {

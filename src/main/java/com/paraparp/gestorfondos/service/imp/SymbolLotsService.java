@@ -56,7 +56,8 @@ public class SymbolLotsService implements ISymbolLotsService {
 			symbolLotsDTO.setLots(lots);
 			symbolLotsDTO.setPortfolio(portfolio);
 			symbolLotsDTO.setSymbol(symbol);
-			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)//TODO se elimian los fonods vendidos con volumen 0
+			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)// TODO se elimian los fonods vendidos con
+																			// volumen 0
 				symbolLots.add(symbolLotsDTO);
 		}
 
@@ -68,10 +69,10 @@ public class SymbolLotsService implements ISymbolLotsService {
 		PortfolioDTO portfolio = porfolioSrv.findById(idPortfolio);
 		List<LotDTO> lotsPorfolio = portfolio.getLots();
 
-		Set<Symbol> hashSet = new HashSet<Symbol>();
+		Set<Symbol> hashSet = new HashSet<>();
 		lotsPorfolio.forEach(lot -> hashSet.add(lot.getSymbol()));
 
-		List<SymbolLotDTO> symbolLots = new ArrayList<SymbolLotDTO>();
+		List<SymbolLotDTO> symbolLots = new ArrayList<>();
 
 		for (Symbol symbol : hashSet) {
 
@@ -83,7 +84,7 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 			symbolLotsDTO.setSymbol(symbol);
 
-			if (symbolLotsDTO.getLots().size() > 0)
+			if (symbolLotsDTO.getLots().isEmpty())
 				symbolLots.add(symbolLotsDTO);
 
 		}
@@ -97,10 +98,10 @@ public class SymbolLotsService implements ISymbolLotsService {
 		PortfolioDTO portfolio = porfolioSrv.findById(idPortfolio);
 		List<LotDTO> lotsPorfolio = portfolio.getLots();
 
-		Set<Symbol> hashSet = new HashSet<Symbol>();
+		Set<Symbol> hashSet = new HashSet<>();
 		lotsPorfolio.forEach(lot -> hashSet.add(lot.getSymbol()));
 
-		List<SymbolLotDTO> symbolLots = new ArrayList<SymbolLotDTO>();
+		List<SymbolLotDTO> symbolLots = new ArrayList<>();
 
 		for (Symbol symbol : hashSet) {
 
@@ -113,7 +114,7 @@ public class SymbolLotsService implements ISymbolLotsService {
 
 //			if (symbolLotsDTO.getLots().size() > 0)
 //				symbolLots.add(symbolLotsDTO);
-			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)//TODO se elimian los fonods vendidos con volumen 0
+			if (symbolLotsDTO.getVolume().compareTo(BigDecimal.ONE) >= 1)// TODO se elimian los fonods vendidos con volumen 0
 				symbolLots.add(symbolLotsDTO);
 		}
 
@@ -132,15 +133,15 @@ public class SymbolLotsService implements ISymbolLotsService {
 		PortfolioDTO portfolio = porfolioSrv.findById(idPortfolio);
 		List<LotDTO> lotsPorfolio = portfolio.getLots();
 
-		Set<Symbol> hashSet = new HashSet<Symbol>();
+		Set<Symbol> hashSet = new HashSet<>();
 		lotsPorfolio.forEach(lot -> hashSet.add(lot.getSymbol()));
 
-		List<SymbolLotDTO> symbolLots = new ArrayList<SymbolLotDTO>();
+		List<SymbolLotDTO> symbolLots = new ArrayList<>();
 
 		for (Symbol symbol : hashSet) {
 
 			List<LotDTO> lots = lotService.findBySymbolAndPortfolioBeforeDate(symbol, idPortfolio, endLocalDate);
-			if (lots.size() != 0) {
+			if (!lots.isEmpty()) {
 				SymbolLotDTO symbolLotsDTO = new SymbolLotDTO();
 
 				symbolLotsDTO.setLots(lots);

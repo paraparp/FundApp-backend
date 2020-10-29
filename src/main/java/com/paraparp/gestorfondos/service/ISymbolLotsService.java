@@ -1,7 +1,6 @@
 package com.paraparp.gestorfondos.service;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jettison.json.JSONException;

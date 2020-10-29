@@ -18,21 +18,23 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
-import com.paraparp.gestorfondos.model.dto.DailyCostDTO;
 import com.paraparp.gestorfondos.model.dto.HistoryDetail;
+import com.paraparp.gestorfondos.model.dto.SymbolDTO;
 import com.paraparp.gestorfondos.model.entity.Historical;
 import com.paraparp.gestorfondos.model.entity.Symbol;
-import com.paraparp.gestorfondos.repository.IHistoricalRepository;
 import com.paraparp.gestorfondos.service.IHistoricalService;
 import com.paraparp.gestorfondos.service.IMorningStartService;
 import com.paraparp.gestorfondos.service.ISymbolService;
 import com.paraparp.gestorfondos.util.ExtraData;
 import com.paraparp.gestorfondos.util.Util;
 import com.paraparp.gestorfondos.util.UtilJSON;
-import com.paraparp.gestorfondos.util.WebScraper;
 
 @Service
 public class MorningStarService implements IMorningStartService {
+
+	private static final String URL_MORNINGSTAR_TIMESERIES = "http://tools.morningstar.es/api/rest.svc/timeseries_price/2nhcdckzon?";
+	private static final String HISTORY_DETAIL_PATH = "$.TimeSeries..HistoryDetail";
+	private static final String FROM_DATE = "2018-01-01";
 
 	ModelMapper modelMapper = new ModelMapper();
 
@@ -44,13 +46,12 @@ public class MorningStarService implements IMorningStartService {
 
 	public int getAllSymbolsHistorical() throws IOException, JSONException {
 
-		List<Symbol> symbolList = symbolService.findAll();
-
-		for (Symbol symbol : symbolList) {
+		List<SymbolDTO> symbolList = symbolService.findAll();
+		for (SymbolDTO symbol : symbolList) {
 			this.getHistoricalByIsin(symbol.getIsin());
 		}
+		
 		return symbolList.size();
-
 	}
 
 	public String getHistoricalByIsin(String isin) throws IOException, JSONException {
@@ -58,35 +59,41 @@ public class MorningStarService implements IMorningStartService {
 		Symbol symbol = symbolService.findByIsin(isin);
 
 		LocalDate endLd = getFridayOfThisWeek(LocalDate.now());
-		LocalDate startLd = getFridayOfThisWeek(LocalDate.parse("2018-01-01"));
+		LocalDate startLd = getFridayOfThisWeek(LocalDate.parse(FROM_DATE));
 
-		String url = "http://tools.morningstar.es/api/rest.svc/timeseries_price/2nhcdckzon?id="
+		String url = URL_MORNINGSTAR_TIMESERIES
+				+ "id="
 				+ this.getMorningStarID(isin) + "&frequency=weekly&outputType=JSON&startdate=" + startLd + "&enddate="
 				+ endLd;
 
 		JSONObject json = UtilJSON.readJsonFromUrl(url);
 
 		String json2 = JsonPath.read(Configuration.defaultConfiguration().jsonProvider().parse(json.toString()),
-				"$.TimeSeries..HistoryDetail").toString();
-		JSONArray jsonArray = (JSONArray) new JSONArray(json2).get(0);
+				HISTORY_DETAIL_PATH).toString();
 
-		for (int i = 0; i < jsonArray.length(); i++) {
+		JSONArray jsonArra = (JSONArray) new JSONArray(json2);
 
-			String stdate = jsonArray.getJSONObject(i).getString("EndDate");
-			String stvalue = jsonArray.getJSONObject(i).getString("Value");
-			Historical newHist = new Historical();
+		if (jsonArra.length() != 0) {
 
-			newHist.setEnddate(LocalDate.parse(stdate));
-			newHist.setPrice(new BigDecimal(stvalue));
-			newHist.setSymbol(symbol);
-			newHist.setIsinPK(isin);
-			newHist.setDatePK(stdate);
-			Historical hist = historicalService.findBySymbolAndDate(symbol, LocalDate.parse(stdate));
+			JSONArray jsonArraySymbol = (JSONArray) new JSONArray(json2).get(0);
 
-			if (hist == null)
-				historicalService.save(newHist);
+			for (int i = 0; i < jsonArraySymbol.length(); i++) {
+
+				String stdate = jsonArraySymbol.getJSONObject(i).getString("EndDate");
+				String stvalue = jsonArraySymbol.getJSONObject(i).getString("Value");
+				Historical newHist = new Historical();
+
+				newHist.setEnddate(LocalDate.parse(stdate));
+				newHist.setPrice(new BigDecimal(stvalue));
+				newHist.setSymbol(symbol);
+				newHist.setIsinPK(isin);
+				newHist.setDatePK(stdate);
+				Historical hist = historicalService.findBySymbolAndDate(symbol, LocalDate.parse(stdate));
+
+				if (hist == null)
+					historicalService.save(newHist);
+			}
 		}
-
 		return "Updated";
 
 	}
@@ -95,13 +102,14 @@ public class MorningStarService implements IMorningStartService {
 
 		String msID = getMorningStarID(isin);
 
-		String URL_MORNINSTAR_HISTORICAL = "http://tools.morningstar.es/api/rest.svc/timeseries_price/2nhcdckzon?startdate="
+		String URL_MORNINSTAR_HISTORICAL = URL_MORNINGSTAR_TIMESERIES
+				+ "startdate="
 				+ date + "&id=" + msID + "&frequency=daily&outputType=JSON&enddate=" + date;
 
 		JSONObject json = UtilJSON.readJsonFromUrl(URL_MORNINSTAR_HISTORICAL);
 
 		String json2 = JsonPath.read(Configuration.defaultConfiguration().jsonProvider().parse(json.toString()),
-				"$.TimeSeries..HistoryDetail").toString();
+				HISTORY_DETAIL_PATH).toString();
 
 		JSONArray jsonArray = null;
 		try {
@@ -129,13 +137,14 @@ public class MorningStarService implements IMorningStartService {
 
 		String ld = LocalDate.parse(date).plusDays(-3).toString();
 
-		String URL_MORNINSTAR_HISTORICAL = "http://tools.morningstar.es/api/rest.svc/timeseries_price/2nhcdckzon?startdate="
+		String URL_MORNINSTAR_HISTORICAL = URL_MORNINGSTAR_TIMESERIES
+				+ "startdate="
 				+ ld + "&id=" + msID + "&frequency=daily&outputType=JSON&enddate=" + date;
 
 		JSONObject json = UtilJSON.readJsonFromUrl(URL_MORNINSTAR_HISTORICAL);
 
 		String json2 = JsonPath.read(Configuration.defaultConfiguration().jsonProvider().parse(json.toString()),
-				"$.TimeSeries..HistoryDetail").toString();
+				HISTORY_DETAIL_PATH).toString();
 
 		JSONArray jsonArray = (JSONArray) new JSONArray(json2).get(0);
 
@@ -161,20 +170,20 @@ public class MorningStarService implements IMorningStartService {
 
 		JSONObject jsonInfo = UtilJSON.readJsonFromUrl(URL_MORNINSTAR_info);
 
-		return jsonInfo.getJSONArray("rows");
+		return (jsonInfo.length() != 0) ? jsonInfo.getJSONArray("rows") : null;
 	}
 
 	public String getMorningStarID(String isin) throws IOException, JSONException {
 
 		JSONArray symbolInfo = this.getSymbolInfo(isin);
-		return symbolInfo.getJSONObject(0).getString("SecId");
+		return (symbolInfo.length() != 0) ? symbolInfo.getJSONObject(0).getString("SecId") : null;
 
 	}
 
 	public String pickMorningStarParam(String isin, String param) throws IOException, JSONException {
 
 		JSONArray symbolInfo = this.getSymbolInfo(isin);
-		return symbolInfo.getJSONObject(0).getString(param);
+		return (symbolInfo.length() != 0) ? symbolInfo.getJSONObject(0).getString(param) : null;
 
 	}
 
@@ -182,7 +191,8 @@ public class MorningStarService implements IMorningStartService {
 	public BigDecimal getLastPrice(String isin) throws IOException, JSONException {
 
 		JSONArray symbolInfo = this.getSymbolInfo(isin);
-		return new BigDecimal(symbolInfo.getJSONObject(0).getString("ClosePrice"));
+		return (symbolInfo.length() != 0) ? new BigDecimal(symbolInfo.getJSONObject(0).getString("ClosePrice"))
+				: BigDecimal.ZERO;
 	}
 
 	public static LocalDate getFridayOfThisWeek(LocalDate start) {

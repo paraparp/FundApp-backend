@@ -6,11 +6,11 @@ import java.time.LocalDate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class DailyCostDTO {
 
 	@Temporal(TemporalType.DATE)
@@ -21,13 +21,5 @@ public class DailyCostDTO {
 	private BigDecimal totalGain;
 
 	private BigDecimal bondPercent;
-
-	public DailyCostDTO(LocalDate date, BigDecimal totalCost, BigDecimal totalGain) {
-
-		super();
-		this.date = date;
-		this.totalCost = totalCost;
-		this.totalGain = totalGain;
-	}
 
 }

@@ -2,22 +2,13 @@ package com.paraparp.gestorfondos.service.imp;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONException;
@@ -99,7 +90,7 @@ public class PortfolioService implements IPortfolioService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<PortfolioDTO> findAll() {
-		List<PortfolioDTO> listPortfolios = new ArrayList<PortfolioDTO>();
+		List<PortfolioDTO> listPortfolios = new ArrayList<>();
 
 		List<Portfolio> portfoliosBack = this.portfolioRepo.findAll();
 		for (Portfolio portfolio : portfoliosBack) {
@@ -112,8 +103,8 @@ public class PortfolioService implements IPortfolioService {
 	public List<PortfolioDTO> findByIdUser(Long userId) {
 
 		User user = userRepo.getOne(userId);
-		List<PortfolioDTO> listPortfolios = new ArrayList<PortfolioDTO>();
-		List<Portfolio> portfoliosBack = new ArrayList<Portfolio>();
+		List<PortfolioDTO> listPortfolios = new ArrayList<>();
+		List<Portfolio> portfoliosBack = new ArrayList<>();
 		portfoliosBack = this.portfolioRepo.findByUser(user);
 
 		for (Portfolio portfolio : portfoliosBack) {
@@ -127,8 +118,8 @@ public class PortfolioService implements IPortfolioService {
 
 		Optional<Portfolio> portfolio = portfolioRepo.findById(portfolioId);
 //				.orElseThrow();
-		List<LotDTO> listLots = new ArrayList<LotDTO>();
-		List<Lot> lotsBack = new ArrayList<Lot>();
+		List<LotDTO> listLots = new ArrayList<>();
+		List<Lot> lotsBack = new ArrayList<>();
 		lotsBack = this.lotRepo.findByPortfolio(portfolio.get());
 
 		for (Lot lot : lotsBack) {
@@ -140,7 +131,7 @@ public class PortfolioService implements IPortfolioService {
 	@Override
 	public List<String> listBrokersByPortfolio(Long idPortfolio) {
 
-		Set<String> brokerList = new HashSet<String>();
+		Set<String> brokerList = new HashSet<>();
 		findLotsByPorfolio(idPortfolio).forEach(symbol -> brokerList.add(symbol.getBroker()));
 
 		return new ArrayList<>(brokerList);
@@ -149,7 +140,7 @@ public class PortfolioService implements IPortfolioService {
 	@Override
 	public List<String> listTypesByPortfolio(Long idPortfolio) {
 
-		Set<String> typeList = new HashSet<String>();
+		Set<String> typeList = new HashSet<>();
 		findLotsByPorfolio(idPortfolio).forEach(lot -> typeList.add(lot.getSymbol().getType()));
 
 		return new ArrayList<>(typeList);
@@ -163,41 +154,42 @@ public class PortfolioService implements IPortfolioService {
 		Optional<Portfolio> portfolio = portfolioRepo.findById(portfolioId);
 //				.orElseThrow();
 		
-		Set<SimpleLotDTO> listLots = new HashSet<SimpleLotDTO>();
-		List<Lot> lotsBack = new ArrayList<Lot>();
-		lotsBack = this.lotRepo.findByPortfolio(portfolio.get());
+		Set<SimpleLotDTO> listLots = new HashSet<>();
+		List<Lot> lotsBack = this.lotRepo.findByPortfolio(portfolio.get());
 
 		BigDecimal total = BigDecimal.ZERO;
 		for (Lot lot : lotsBack) {
 			total = total.add(lot.getPrice().multiply(lot.getVolume()));
-			listLots.add(new SimpleLotDTO(lot.getDate(), lot.getPrice(), lot.getVolume(),
-					lot.getPrice().multiply(lot.getVolume())));
+			listLots.add(new SimpleLotDTO(lot.getDate(), lot.getPrice(), lot.getVolume(),total));
 		}
 
 		List<DailyCostDTO> fridaysInRange = listOfFridaysFrom(firstFriday);
 
 		for (DailyCostDTO dailyCost : fridaysInRange) {
 
-			List<SymbolLotDTO> lits = symbolLotsService.findByPortfolioAndEndDate(portfolioId,
+			List<SymbolLotDTO> listSymbLot = this.symbolLotsService.findByPortfolioAndEndDate(portfolioId,
 					dailyCost.getDate().toString());
 
 			BigDecimal totalDay = BigDecimal.ZERO;
 			BigDecimal totalValueDay = BigDecimal.ZERO;
 			BigDecimal totalValueDayBond = BigDecimal.ZERO;
 
-			for (SymbolLotDTO symbols : lits) {
+			for (SymbolLotDTO symbols : listSymbLot) {
 
 				totalDay = totalDay.add(symbols.getCost());
-				Historical hist = historicalService.findBySymbolAndDate(symbols.getSymbol(), dailyCost.getDate());
+				Historical hist = this.historicalService.findBySymbolAndDate(symbols.getSymbol(), dailyCost.getDate());
 				if (hist != null)
 					totalValueDay = totalValueDay.add(hist.getPrice().multiply(symbols.getVolume()));
-				else
+				else if (symbols.getSymbol().getUpdated() == null) // Symbol without Data
+					totalValueDay = totalValueDay.add(symbols.getCost());
+				else //Symbol not updated
 					totalValueDay = totalValueDay.add(msService.getLastPrice(symbols.getSymbol().getIsin()).multiply(symbols.getVolume()));
-				
+			
 				if (!StringUtils.isEmpty(symbols.getSymbol().getType())
 						&& symbols.getSymbol().getType().contains("Bond")) {
 					totalValueDayBond = totalValueDayBond.add(symbols.getValue());
 				}
+
 			}
 
 			dailyCost.setTotalCost(totalDay);
@@ -252,11 +244,11 @@ public class PortfolioService implements IPortfolioService {
 		if (difference < 0)
 			difference += 7;
 
-		List<DailyCostDTO> fridaysInRange = new ArrayList<DailyCostDTO>();
+		List<DailyCostDTO> fridaysInRange = new ArrayList<>();
 
 		LocalDate currentFriday = start.plusDays(difference);
 		do {
-			fridaysInRange.add(new DailyCostDTO(currentFriday, BigDecimal.ZERO, BigDecimal.ZERO));
+			fridaysInRange.add(new DailyCostDTO(currentFriday, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO));
 			currentFriday = currentFriday.plusDays(7);
 		} while (currentFriday.isBefore(end));
 

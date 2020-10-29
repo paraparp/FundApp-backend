@@ -3,6 +3,7 @@ package com.paraparp.gestorfondos.model.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,10 +17,14 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -57,11 +62,15 @@ public class User implements Serializable {
 	private String email;
 
 	@Column(name = "creation_date")
+	@CreationTimestamp
 	private LocalDate creationDate;
 
 	@Column(name = "password", length = 100)
 	@NotNull
 	private String password;
+	
+	@Column(name = "avatar")
+	private String avatar;
 
 ////	@Column(name = "google", columnDefinition = "boolean default false")
 //	private boolean google = true;
@@ -69,13 +78,10 @@ public class User implements Serializable {
 ////	@Column(name = "enabled", columnDefinition = "boolean default true")
 	private boolean enabled;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"), uniqueConstraints = {
-			@UniqueConstraint(columnNames = { "user_id", "role_id" }) })
-	private List<Role> roles;
+
 
 	@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Portfolio> portfolios;
+	private Set<Portfolio> portfolios;
 
 }

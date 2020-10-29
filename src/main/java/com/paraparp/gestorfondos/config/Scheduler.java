@@ -15,21 +15,24 @@ public class Scheduler {
 
 	@Autowired
 	private SymbolUpdaterService updateService;
-	
+
 	@Autowired
 	private MorningStarService msService;
-	
-//Everyday each 3 hours from 12h
+
+	// every 2 hours starting at 00am, of every day
 	@Scheduled(cron = "0 0 0/2 ? * *")
 	public void fixedDelaySch() {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		Date now = new Date();
-		String strDate = sdf.format(now);
-		System.out.println("Fixed Delay scheduler:: " + strDate);
+		String startDate = sdf.format(new Date());
+
+		System.out.println("Fixed Delay scheduler:: " + startDate);
+
 		try {
+
 			updateService.updater();
 			msService.getAllSymbolsHistorical();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

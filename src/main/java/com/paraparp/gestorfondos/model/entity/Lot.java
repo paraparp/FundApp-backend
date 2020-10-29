@@ -17,7 +17,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Digits;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.Data;
 
@@ -28,6 +30,7 @@ public class Lot implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
@@ -38,19 +41,19 @@ public class Lot implements Serializable {
 	@Digits(integer=18, fraction=4)   
 	private BigDecimal volume = BigDecimal.ZERO;
 
-
     @Digits(integer=18, fraction=4)   
-	private BigDecimal price = BigDecimal.ZERO;;
+	private BigDecimal price = BigDecimal.ZERO;
 
 	private String broker;
 	
 	private LocalDate date;
 
-	@JsonIgnore
+	@JsonBackReference
 	@OneToOne
 	private Portfolio portfolio;
 
 	@Column(name = "creation_date")
+	@CreationTimestamp
 	private LocalDate creationDate;
 
 }

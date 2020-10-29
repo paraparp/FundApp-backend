@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.paraparp.gestorfondos.exception.ResourceNotFoundException;
+import com.paraparp.gestorfondos.errors.exceptions.ResourceNotFoundException;
 import com.paraparp.gestorfondos.model.dto.LotDTO;
 import com.paraparp.gestorfondos.model.entity.Lot;
 import com.paraparp.gestorfondos.repository.ILotRepository;
@@ -29,7 +29,7 @@ import com.paraparp.gestorfondos.service.ILotService;
 @CrossOrigin(origins = "*")
 @RequestMapping("/fundapp/lots")
 public class LotController {
-	
+
 	@Autowired
 	private ILotRepository lotRepository;
 
@@ -41,9 +41,8 @@ public class LotController {
 		return lotService.findAll();
 	}
 
-	
 	@GetMapping("/{id}")
-	public ResponseEntity<LotDTO> getLotById(@PathVariable(value = "id") Long lotId)  {
+	public ResponseEntity<LotDTO> getLotById(@PathVariable(value = "id") Long lotId) {
 		LotDTO lot = lotService.findById(lotId);
 		return ResponseEntity.ok().body(lot);
 	}

@@ -22,22 +22,14 @@ public class PortfolioDTO {
 
 	public BigDecimal getCost() {
 
-		BigDecimal total = BigDecimal.ZERO;
-		for (LotDTO lot : lots) {
-			total = total.add(lot.getCost());
-		}
-
-		return total;
+		return lots.stream().map(LotDTO::getCost).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	public BigDecimal getValue() {
 
-		BigDecimal total = BigDecimal.ZERO;
-		for (LotDTO lot : lots) {
-			total = total.add(lot.getValue());
-		}
+		BigDecimal totalValue =  lots.stream().map(LotDTO::getValue).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-		return (total.compareTo(BigDecimal.ZERO) != 0) ? total : getCost();
+		return (totalValue.compareTo(BigDecimal.ZERO) != 0) ? totalValue : getCost();
 	}
 
 	public BigDecimal getVariation() {

@@ -23,16 +23,14 @@ public class SymbolLotDTO {
 	public BigDecimal getVolume() {
 
 		BigDecimal volume = BigDecimal.ZERO;
-
 		if (lots != null) {
-			for (LotDTO lot : lots) {
-				volume = volume.add(lot.getVolume());
-			}
+			volume = lots.stream().map(LotDTO::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 		}
 		return volume;
 	}
 
 	public BigDecimal getValue() {
+		
 		BigDecimal value = BigDecimal.ZERO;
 		if (symbol.getLastPrice() != null)
 			value = getVolume().multiply(symbol.getLastPrice());
@@ -42,11 +40,7 @@ public class SymbolLotDTO {
 
 	public BigDecimal getCost() {
 
-		BigDecimal cost = BigDecimal.ZERO;
-		for (LotDTO lot : lots) {
-			cost = cost.add(lot.getCost());
-		}
-		return cost;
+		return lots.stream().map(LotDTO::getCost).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	public BigDecimal getPrice() {

@@ -18,4 +18,5 @@ public class UserDTO {
 	private boolean google;
 	private boolean enabled;
 
+
 }

@@ -11,28 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.paraparp.gestorfondos.model.entity.Historical;
-import com.paraparp.gestorfondos.repository.IHistoricalRepository;
 import com.paraparp.gestorfondos.service.IHistoricalService;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/fundapp/historical")
 public class HisoricalController {
-	
-	@Autowired
-	private IHistoricalRepository historicalRepository;
 
 	@Autowired
 	private IHistoricalService historicalService;
 
-
-	
 	@GetMapping("/{isin}")
-	public ResponseEntity <List<Historical>> getLotById(@PathVariable(value = "isin") String isin)  {
+	public ResponseEntity<List<Historical>> getLotById(@PathVariable(value = "isin") String isin) {
+		
 		List<Historical> historical = historicalService.findByIsin(isin);
+		
 		return ResponseEntity.ok().body(historical);
 	}
-
-
 
 }

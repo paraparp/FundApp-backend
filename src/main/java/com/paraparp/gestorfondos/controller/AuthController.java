@@ -1,30 +1,42 @@
 package com.paraparp.gestorfondos.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
-@CrossOrigin(origins = "*")
-@RequestMapping("/")
+@RequiredArgsConstructor
 public class AuthController {
 
-	
+//	private final AuthenticationManager authenticationManager;
+//	private final UserDTOConverter converter;
+//
+//	@PostMapping("/auth/login")
+//	public ResponseEntity<JwtUserResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
+//
+//		Authentication auth = authenticationManager.authenticate(
+//				new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+//
+//		SecurityContextHolder.getContext().setAuthentication(auth);
+//
+//		UserEntity user = (UserEntity) auth.getPrincipal();
+//
+//		String jwtToken = jwtTokenProvider.generateToken(auth);
+//
+//		return ResponseEntity.status(HttpStatus.CREATED)
+//				.body(convertUserEntityAndTokenToJwtUserResponse(user, jwtToken));
+//
+//	}
+//
+//	public GetUserDTO me(@AuthenticationPrincipal UserEntity user) {
+//		return converter.convertUserEntityToGetUserDto(user);
+//	}
+//
+//	private JwtUserResponse convertUserEntityAndTokenToJwtUserResponse(UserEntity user, String jwtToken) {
+//		return JwtUserResponse.jwtUserResponseBuilder().email(user.getEmail()).avatar(user.getAvatar())
+//				.username(user.getUsername())
+//				.roles(user.getRoles().stream().map(UserRole::name).collect(Collectors.toSet())).token(jwtToken)
+//				.build();
+//	}
 
-	@GetMapping("/log")//TODO ("/")
-	public String login() {
-		return "authenticated successfully";
-	}
-
-
-    @GetMapping("/not-restricted")
-    public String notRestricted() {
-        return "you don't need to be logged in";
-    }
-
-    @GetMapping("/restricted")
-    public String restricted() {
-        return "if you see this you are logged in";
-    }
 }

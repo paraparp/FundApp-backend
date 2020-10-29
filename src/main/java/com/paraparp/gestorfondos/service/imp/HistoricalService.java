@@ -3,7 +3,6 @@ package com.paraparp.gestorfondos.service.imp;
 import java.time.LocalDate;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.paraparp.gestorfondos.model.entity.Historical;
@@ -11,11 +10,14 @@ import com.paraparp.gestorfondos.model.entity.Symbol;
 import com.paraparp.gestorfondos.repository.IHistoricalRepository;
 import com.paraparp.gestorfondos.service.IHistoricalService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class HistoricalService implements IHistoricalService {
 
-	@Autowired
-	private IHistoricalRepository historicalRepository;
+	
+	private final IHistoricalRepository historicalRepository;
 
 	@Override
 	public Historical findBySymbolAndDate(Symbol symbol, LocalDate ld) {
@@ -29,10 +31,7 @@ public class HistoricalService implements IHistoricalService {
 
 	@Override
 	public List<Historical> findByIsin(String isin) {
-		
-		List<Historical> hist =  this.historicalRepository.findByIsin(isin);
-		
-		return  hist;
+		return this.historicalRepository.findByIsin(isin);
 	}
 
 }

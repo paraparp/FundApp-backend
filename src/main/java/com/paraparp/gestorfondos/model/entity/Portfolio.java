@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,16 +16,19 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Data;
 
 @Data
 @Entity
 @Table(name = "portfolios")
+
+@EntityListeners(AuditingEntityListener.class)
 public class Portfolio implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -43,11 +47,12 @@ public class Portfolio implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
-	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JsonManagedReference
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "portfolio_id")
 	private List<Lot> lots;
 
+	@CreatedDate
 	@Column(name = "creation_date")
 	private LocalDate creationDate;
 //	  private final LocalDateTime createdAt = LocalDateTime.now();

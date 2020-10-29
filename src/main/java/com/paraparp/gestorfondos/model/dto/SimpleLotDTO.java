@@ -8,9 +8,11 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class SimpleLotDTO {
 
 	@Temporal(TemporalType.DATE)
@@ -26,12 +28,6 @@ public class SimpleLotDTO {
 		return volume.multiply(price);
 	}
 
-	public SimpleLotDTO(LocalDate date, BigDecimal volume, BigDecimal price, BigDecimal total) {
-		super();
-		this.date = date;
-		this.volume = volume;
-		this.price = price;
-		this.total = total;
-	}
+
 
 }

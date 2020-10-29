@@ -1,4 +1,4 @@
-package com.paraparp.gestorfondos.exception;
+package com.paraparp.gestorfondos.errors.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
